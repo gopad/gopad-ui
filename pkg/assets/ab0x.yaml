@@ -1,0 +1,16 @@
+pkg: "assets"
+dest: "."
+fmt: true
+
+compression:
+  compress: true
+
+custom:
+  - files:
+    - "../../dist/static/index.html"
+    base: "../../dist/static/"
+    prefix: ""
+  - files:
+    - "../../dist/static/assets/"
+    base: "../../dist/static/assets/"
+    prefix: ""

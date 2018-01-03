@@ -20,7 +20,7 @@ This project requires NodeJS to build the sources, the installation of NodeJS wo
 
 ```
 yarn install
-yarn run build
+yarn build
 ```
 
 If you also want to publish it as a single binary with our server based on Go make sure you have a working Go environment, for further reference or a guide take a look at the [install instructions](http://golang.org/doc/install.html). As this project relies on vendoring you have to use a Go version `>= 1.6`
@@ -42,7 +42,7 @@ To start developing on this UI you have to execute only a few commands. To setup
 
 ```
 yarn install
-yarn run watch
+yarn watch
 
 ./gopad-ui server --static dist/static/
 ```

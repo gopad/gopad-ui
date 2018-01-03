@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+
+    <meta content="Etherpad for markdown with Go" name="description">
+    <meta content="Gopad Team" name="author">
+
+    <title>Gopad</title>
+    <link href="/assets/images/favicon.ico" rel="icon" type="image/x-icon">
+
+    <% for (var i = 0; i < htmlWebpackPlugin.files.css.length; i++) { %>
+      <link href="<%= htmlWebpackPlugin.files.css[i] %>" rel="stylesheet">
+    <% } %>
+  </head>
+  <body role="document">
+    <div id="app"></div>
+
+    <script>
+      window.INITIAL_STATE = { api: "{{ .Endpoint }}" };
+    </script>
+
+    <% for (var i = 0; i < htmlWebpackPlugin.files.js.length; i++) { %>
+      <script src="<%= htmlWebpackPlugin.files.js[i] %>"></script>
+    <% } %>
+  </body>
+</html>

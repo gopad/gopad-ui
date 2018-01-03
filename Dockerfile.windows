@@ -1,0 +1,19 @@
+# escape=`
+FROM microsoft/nanoserver:10.0.14393.1593
+
+LABEL maintainer="Thomas Boerger <thomas@webhippie.de>" `
+  org.label-schema.name="Gopad UI" `
+  org.label-schema.vendor="Thomas Boerger" `
+  org.label-schema.schema-version="1.0"
+
+EXPOSE 9000 80 443
+VOLUME ["\\storage"]
+
+ENV UMSCHLAG_UI_ASSETS /assets
+ENV UMSCHLAG_UI_STORAGE /storage
+
+ENTRYPOINT ["\\gopad-ui.exe"]
+CMD ["server"]
+
+COPY dist/static /assets
+COPY gopad-ui.exe gopad-ui.exe

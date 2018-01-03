@@ -1,0 +1,14 @@
+{
+  "extends": [
+    "plugin:vue/recommended"
+  ],
+  "env": {
+    "es6": true,
+    "browser": true,
+    "node": true
+  },
+  "globals": {
+    "localStorage": true,
+    "window": true
+  }
+}
