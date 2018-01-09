@@ -18,7 +18,8 @@ install:
       docker version
       go version
   - ps: |
-      $env:Path = "c:\go\bin;$env:Path"
+      $env:PATH = "c:\go\bin;$env:PATH"
+      $env:GOPATH = "c:\go"
 
 build_script:
   - cmd: |
