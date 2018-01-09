@@ -140,7 +140,11 @@ release-check:
 .PHONY: publish
 publish: release
 
-HAS_RETOOL := $(shell command -v retool)
+ifeq ($(OS), Windows_NT)
+	HAS_RETOOL := $(shell where retool)
+else
+	HAS_RETOOL := $(shell command -v retool)
+endif
 
 .PHONY: retool
 retool:
