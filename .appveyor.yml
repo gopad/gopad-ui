@@ -17,12 +17,14 @@ install:
   - ps: |
       docker version
       go version
+  - ps: |
+      $env:Path = "c:\go\bin;$env:Path"
 
 build_script:
   - cmd: |
       yarn install
   - cmd: |
-      yarn run build
+      yarn build
   - cmd: |
       make retool
   - cmd: |
