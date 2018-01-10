@@ -1,9 +1,10 @@
 version: '{build}'
 image: 'Visual Studio 2017'
 
-clone_folder: 'c:\go\src\github.com\gopad\gopad-ui'
+clone_folder: 'c:\gopath\src\github.com\gopad\gopad-ui'
 
 environment:
+  GOPATH: c:\gopath
   DOCKER_USERNAME:
     secure: '4YzzahbEiMZQJpOCOd1LAw=='
   DOCKER_PASSWORD:
@@ -18,8 +19,7 @@ install:
       docker version
       go version
   - ps: |
-      $env:PATH = "c:\go\bin;$env:PATH"
-      $env:GOPATH = "c:\go"
+      $env:Path = "c:\gopath\bin;$env:Path"
 
 build_script:
   - cmd: |

@@ -10,7 +10,7 @@ import (
 	"github.com/gopad/gopad-ui/pkg/config"
 )
 
-//go:generate retool -tool-dir ../../_tools do fileb0x ab0x.yaml
+//go:generate fileb0x ab0x.yaml
 
 // Load initializes the static files.
 func Load(logger log.Logger) http.FileSystem {

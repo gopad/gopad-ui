@@ -7,13 +7,13 @@ LABEL maintainer="Thomas Boerger <thomas@webhippie.de>" `
   org.label-schema.schema-version="1.0"
 
 EXPOSE 9000 80 443
-VOLUME ["\\storage"]
+VOLUME c:\storage
 
-ENV UMSCHLAG_UI_ASSETS /assets
-ENV UMSCHLAG_UI_STORAGE /storage
+ENV UMSCHLAG_UI_ASSETS c:\assets
+ENV UMSCHLAG_UI_STORAGE c:\storage
 
-ENTRYPOINT ["\\gopad-ui.exe"]
+ENTRYPOINT ["c:\gopad-ui.exe"]
 CMD ["server"]
 
-COPY dist/static /assets
-COPY gopad-ui.exe gopad-ui.exe
+COPY dist/static c:\assets
+COPY gopad-ui.exe c:\gopad-ui.exe
