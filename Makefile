@@ -6,8 +6,12 @@ EXECUTABLE := $(NAME)
 
 ifeq ($(OS), Windows_NT)
 	EXECUTABLE := $(NAME).exe
+	HAS_RETOOL := $(shell where retool)
+	HAS_XGO := $(shell where xgo)
 else
 	EXECUTABLE := $(NAME)
+	HAS_RETOOL := $(shell command -v retool)
+	HAS_XGO := $(shell command -v xgo)
 endif
 
 PACKAGES ?= $(shell go list ./... | grep -v /vendor/ | grep -v /_tools/)
@@ -47,6 +51,7 @@ update:
 
 .PHONY: sync
 sync:
+	retool sync
 	retool do dep ensure
 
 .PHONY: graph
@@ -100,22 +105,22 @@ release-dirs:
 	mkdir -p $(DIST)/binaries $(DIST)/release
 
 .PHONY: release-windows
-release-windows:
-	retool do xgo -dest $(DIST)/binaries -tags 'netgo $(TAGS)' -ldflags '-linkmode external -extldflags "-static" $(LDFLAGS)' -targets 'windows/*' -out $(EXECUTABLE)-$(VERSION)  ./cmd/$(NAME)
+release-windows: xgo
+	xgo -dest $(DIST)/binaries -tags 'netgo $(TAGS)' -ldflags '-linkmode external -extldflags "-static" $(LDFLAGS)' -targets 'windows/*' -out $(EXECUTABLE)-$(VERSION)  ./cmd/$(NAME)
 ifeq ($(CI),drone)
 	mv /build/* $(DIST)/binaries
 endif
 
 .PHONY: release-linux
-release-linux:
-	retool do xgo -dest $(DIST)/binaries -tags 'netgo $(TAGS)' -ldflags '-linkmode external -extldflags "-static" $(LDFLAGS)' -targets 'linux/*' -out $(EXECUTABLE)-$(VERSION)  ./cmd/$(NAME)
+release-linux: xgo
+	xgo -dest $(DIST)/binaries -tags 'netgo $(TAGS)' -ldflags '-linkmode external -extldflags "-static" $(LDFLAGS)' -targets 'linux/*' -out $(EXECUTABLE)-$(VERSION)  ./cmd/$(NAME)
 ifeq ($(CI),drone)
 	mv /build/* $(DIST)/binaries
 endif
 
 .PHONY: release-darwin
-release-darwin:
-	retool do xgo -dest $(DIST)/binaries -tags 'netgo $(TAGS)' -ldflags '$(LDFLAGS)' -targets 'darwin/*' -out $(EXECUTABLE)-$(VERSION)  ./cmd/$(NAME)
+release-darwin: xgo
+	xgo -dest $(DIST)/binaries -tags 'netgo $(TAGS)' -ldflags '$(LDFLAGS)' -targets 'darwin/*' -out $(EXECUTABLE)-$(VERSION)  ./cmd/$(NAME)
 ifeq ($(CI),drone)
 	mv /build/* $(DIST)/binaries
 endif
@@ -131,16 +136,15 @@ release-check:
 .PHONY: publish
 publish: release
 
-ifeq ($(OS), Windows_NT)
-	HAS_RETOOL := $(shell where retool)
-else
-	HAS_RETOOL := $(shell command -v retool)
-endif
-
 .PHONY: retool
 retool:
 ifndef HAS_RETOOL
 	go get -u github.com/twitchtv/retool
 endif
-	retool sync
 	retool build
+
+.PHONY: xgo
+xgo:
+ifndef HAS_XGO
+	go get -u github.com/karalabe/xgo
+endif
