@@ -7,11 +7,9 @@ EXECUTABLE := $(NAME)
 ifeq ($(OS), Windows_NT)
 	EXECUTABLE := $(NAME).exe
 	HAS_RETOOL := $(shell where retool)
-	HAS_XGO := $(shell where xgo)
 else
 	EXECUTABLE := $(NAME)
 	HAS_RETOOL := $(shell command -v retool)
-	HAS_XGO := $(shell command -v xgo)
 endif
 
 PACKAGES ?= $(shell go list ./... | grep -v /vendor/ | grep -v /_tools/)
@@ -25,7 +23,7 @@ ifndef VERSION
 		VERSION ?= $(subst v,,$(DRONE_TAG))
 	else
 		ifneq ($(DRONE_BRANCH),)
-			VERSION ?= $(subst release/v,,$(DRONE_BRANCH))
+			VERSION ?= $(DRONE_BRANCH)
 		else
 			VERSION ?= master
 		endif
@@ -85,7 +83,7 @@ generate:
 
 .PHONY: test
 test:
-	for PKG in $(PACKAGES); do go test -cover -coverprofile $$GOPATH/src/$$PKG/coverage.out $$PKG || exit 1; done;
+	retool do goverage -v -coverprofile coverage.out $(PACKAGES)
 
 .PHONY: install
 install: $(SOURCES)
@@ -105,24 +103,30 @@ release-dirs:
 	mkdir -p $(DIST)/binaries $(DIST)/release
 
 .PHONY: release-windows
-release-windows: xgo
-	xgo -dest $(DIST)/binaries -tags 'netgo $(TAGS)' -ldflags '-linkmode external -extldflags "-static" $(LDFLAGS)' -targets 'windows/*' -out $(EXECUTABLE)-$(VERSION)  ./cmd/$(NAME)
+release-windows:
 ifeq ($(CI),drone)
+	xgo -dest $(DIST)/binaries -tags 'netgo $(TAGS)' -ldflags '-linkmode external -extldflags "-static" $(LDFLAGS)' -targets 'windows/*' -out $(EXECUTABLE)-$(VERSION)  ./cmd/$(NAME)
 	mv /build/* $(DIST)/binaries
+else
+	retool do xgo -dest $(DIST)/binaries -tags 'netgo $(TAGS)' -ldflags '-linkmode external -extldflags "-static" $(LDFLAGS)' -targets 'windows/*' -out $(EXECUTABLE)-$(VERSION)  ./cmd/$(NAME)
 endif
 
 .PHONY: release-linux
-release-linux: xgo
-	xgo -dest $(DIST)/binaries -tags 'netgo $(TAGS)' -ldflags '-linkmode external -extldflags "-static" $(LDFLAGS)' -targets 'linux/*' -out $(EXECUTABLE)-$(VERSION)  ./cmd/$(NAME)
+release-linux:
 ifeq ($(CI),drone)
+	xgo -dest $(DIST)/binaries -tags 'netgo $(TAGS)' -ldflags '-linkmode external -extldflags "-static" $(LDFLAGS)' -targets 'linux/*' -out $(EXECUTABLE)-$(VERSION)  ./cmd/$(NAME)
 	mv /build/* $(DIST)/binaries
+else
+	retool do xgo -dest $(DIST)/binaries -tags 'netgo $(TAGS)' -ldflags '-linkmode external -extldflags "-static" $(LDFLAGS)' -targets 'linux/*' -out $(EXECUTABLE)-$(VERSION)  ./cmd/$(NAME)
 endif
 
 .PHONY: release-darwin
-release-darwin: xgo
-	xgo -dest $(DIST)/binaries -tags 'netgo $(TAGS)' -ldflags '$(LDFLAGS)' -targets 'darwin/*' -out $(EXECUTABLE)-$(VERSION)  ./cmd/$(NAME)
+release-darwin:
 ifeq ($(CI),drone)
+	xgo -dest $(DIST)/binaries -tags 'netgo $(TAGS)' -ldflags '$(LDFLAGS)' -targets 'darwin/*' -out $(EXECUTABLE)-$(VERSION)  ./cmd/$(NAME)
 	mv /build/* $(DIST)/binaries
+else
+	retool do xgo -dest $(DIST)/binaries -tags 'netgo $(TAGS)' -ldflags '$(LDFLAGS)' -targets 'darwin/*' -out $(EXECUTABLE)-$(VERSION)  ./cmd/$(NAME)
 endif
 
 .PHONY: release-copy
@@ -142,9 +146,3 @@ ifndef HAS_RETOOL
 	go get -u github.com/twitchtv/retool
 endif
 	retool build
-
-.PHONY: xgo
-xgo:
-ifndef HAS_XGO
-	go get -u github.com/karalabe/xgo
-endif

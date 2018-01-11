@@ -15,6 +15,14 @@
     {
       "Repository": "github.com/UnnoTed/fileb0x",
       "Commit": "541cb8da1731f2b7ea0d89d018ce5fede91c0507"
+    },
+    {
+      "Repository": "github.com/karalabe/xgo",
+      "Commit": "84162294c28a02481aa2c99ee5487db8189ef18b"
+    },
+    {
+      "Repository": "github.com/haya14busa/goverage",
+      "Commit": "b9be4a50677bf4dca7f109c0c9e0341f8beaabbb"
     }
   ],
   "RetoolVersion": "1.3.5"
