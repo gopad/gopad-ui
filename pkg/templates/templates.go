@@ -10,7 +10,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/gopad/gopad-ui/pkg/assets"
 	"github.com/gopad/gopad-ui/pkg/config"
-	// "github.com/Masterminds/sprig"
+	"github.com/Masterminds/sprig"
 )
 
 // Load loads the template to make it parseable.
@@ -111,5 +111,5 @@ func Load(cfg *config.Config) *template.Template {
 
 // Funcs provides some general usefule template helpers.
 func Funcs() template.FuncMap {
-	return template.FuncMap{} // sprig.FuncMap()
+	return sprig.FuncMap()
 }
