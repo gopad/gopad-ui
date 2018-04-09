@@ -4,64 +4,57 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/go-kit/kit/log/level"
+	"github.com/rs/zerolog/log"
 	"github.com/gopad/gopad-ui/pkg/config"
 	"gopkg.in/urfave/cli.v2"
 )
 
 // Health provides the sub-command to perform a health check.
-func Health() *cli.Command {
+func Health(cfg *config.Config) *cli.Command {
 	return &cli.Command{
 		Name:  "health",
 		Usage: "perform health checks for ui",
 		Flags: []cli.Flag{
 			&cli.StringFlag{
-				Name:        "ui-addr",
-				Value:       defaultAddr,
-				Usage:       "address to access the ui",
-				EnvVars:     []string{"GOPAD_UI_ADDR"},
-				Destination: &config.Server.Addr,
-			},
-			&cli.StringFlag{
-				Name:        "ui-root",
-				Value:       "/",
-				Usage:       "root folder of the ui",
-				EnvVars:     []string{"GOPAD_UI_ROOT"},
-				Destination: &config.Server.Root,
+				Name:        "ui-private",
+				Value:       privateAddr,
+				Usage:       "private address to the ui",
+				EnvVars:     []string{"GOPAD_UI_PRIVATE"},
+				Destination: &cfg.Server.Private,
 			},
 		},
-		Action: func(c *cli.Context) error {
-			logger := logger()
+		Before: before(cfg),
+		Action: health(cfg),
+	}
+}
 
-			resp, err := http.Get(
-				fmt.Sprintf(
-					"http://%s%shealthz",
-					config.Server.Addr,
-					config.Server.Root,
-				),
-			)
+func health(cfg *config.Config) cli.ActionFunc {
+	return func(c *cli.Context) error {
+		resp, err := http.Get(
+			fmt.Sprintf(
+				"http://%s/healthz",
+				cfg.Server.Private,
+			),
+		)
 
-			if err != nil {
-				level.Error(logger).Log(
-					"msg", "failed to request health check",
-					"err", err,
-				)
+		if err != nil {
+			log.Error().
+				Err(err).
+				Msg("failed to request health check")
 
-				return err
-			}
+			return err
+		}
 
-			defer resp.Body.Close()
+		defer resp.Body.Close()
 
-			if resp.StatusCode != 200 {
-				level.Error(logger).Log(
-					"msg", "health seems to be in a bad state",
-					"code", resp.StatusCode,
-				)
+		if resp.StatusCode != 200 {
+			log.Error().
+				Err(err).
+				Msg("health seems to be in a bad state")
 
-				return err
-			}
+			return err
+		}
 
-			return nil
-		},
+		return nil
 	}
 }

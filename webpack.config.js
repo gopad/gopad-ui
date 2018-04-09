@@ -67,42 +67,42 @@ module.exports = {
         }
       },
       {
-        test: /\.(woff|woff2)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
         loader: 'file-loader',
         options: {
-          name: 'assets/fonts/[name].[ext]',
+          name: '/assets/fonts/[name].[ext]',
           mimetype: 'application/font-woff'
         }
       },
       {
-        test: /\.otf(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        test: /\.otf(\?v=\d+\.\d+\.\d+)?$/,
         loader: 'file-loader',
         options: {
-          name: 'assets/fonts/[name].[ext]',
+          name: '/assets/fonts/[name].[ext]',
           mimetype: 'application/x-font-opentype'
         }
       },
       {
-        test: /\.svg(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
         loader: 'file-loader',
         options: {
-          name: 'assets/fonts/[name].[ext]',
+          name: '/assets/fonts/[name].[ext]',
           mimetype: 'image/svg+xml'
         }
       },
       {
-        test: /\.ttf(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
         loader: 'file-loader',
         options: {
-          name: 'assets/fonts/[name].[ext]',
+          name: '/assets/fonts/[name].[ext]',
           mimetype: 'application/octet-stream'
         }
       },
       {
-        test: /\.eot(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
         loader: 'file-loader',
         options: {
-          name: 'assets/fonts/[name].[ext]',
+          name: '/assets/fonts/[name].[ext]',
           mimetype: 'application/vnd.ms-fontobject'
         }
       }

@@ -9,8 +9,8 @@ LABEL maintainer="Thomas Boerger <thomas@webhippie.de>" `
 EXPOSE 9000 80 443
 VOLUME ["c:\\storage"]
 
-ENV UMSCHLAG_UI_ASSETS c:\assets
-ENV UMSCHLAG_UI_STORAGE c:\storage
+ENV GOPAD_UI_ASSETS c:\assets
+ENV GOPAD_UI_STORAGE c:\storage
 
 ENTRYPOINT ["c:\\gopad-ui.exe"]
 CMD ["server"]

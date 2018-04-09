@@ -29,6 +29,8 @@ build_script:
   - cmd: |
       make retool
   - cmd: |
+      make sync
+  - cmd: |
       make generate
   - cmd: |
       make build

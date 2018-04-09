@@ -7,14 +7,14 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/go-kit/kit/log"
-	"github.com/go-kit/kit/log/level"
+	"github.com/rs/zerolog/log"
 	"github.com/gopad/gopad-ui/pkg/assets"
 	"github.com/gopad/gopad-ui/pkg/config"
+	// "github.com/Masterminds/sprig"
 )
 
 // Load loads the template to make it parseable.
-func Load(logger log.Logger) *template.Template {
+func Load(cfg *config.Config) *template.Template {
 	tpls := template.New(
 		"",
 	).Funcs(
@@ -27,47 +27,38 @@ func Load(logger log.Logger) *template.Template {
 	)
 
 	if err != nil {
-		level.Warn(logger).Log(
-			"msg", "failed to get builtin template list",
-			"err", err,
-		)
+		log.Warn().
+			Err(err).
+			Msg("failed to get builtin template list")
 	} else {
 		for _, name := range files {
 			if !strings.HasSuffix(name, ".html") {
 				continue
 			}
 
-			file, readErr := assets.ReadFile(name)
+			file, err := assets.ReadFile(name)
 
-			if readErr != nil {
-				level.Warn(logger).Log(
-					"msg", "failed to read builtin template",
-					"err", readErr,
-					"file", name,
-				)
+			if err != nil {
+				log.Warn().
+					Err(err).
+					Str("file", name).
+					Msg("failed to read builtin template")
 			}
 
-			_, parseErr := tpls.New(
-				name,
-			).Parse(
-				string(file),
-			)
-
-			if parseErr != nil {
-				level.Warn(logger).Log(
-					"msg", "failed to parse builtin template",
-					"err", parseErr,
-					"file", name,
-				)
+			if _, err := tpls.New(name).Parse(string(file)); err != nil {
+				log.Warn().
+					Err(err).
+					Str("file", name).
+					Msg("failed to parse builtin template")
 			}
 		}
 	}
 
-	if config.Server.Static != "" {
-		if stat, err := os.Stat(config.Server.Static); err == nil && stat.IsDir() {
+	if cfg.Server.Static != "" {
+		if stat, err := os.Stat(cfg.Server.Static); err == nil && stat.IsDir() {
 			files := []string{}
 
-			filepath.Walk(config.Server.Static, func(path string, f os.FileInfo, err error) error {
+			filepath.Walk(cfg.Server.Static, func(path string, f os.FileInfo, err error) error {
 				if f.IsDir() {
 					return nil
 				}
@@ -85,40 +76,33 @@ func Load(logger log.Logger) *template.Template {
 			})
 
 			for _, name := range files {
-				file, readErr := ioutil.ReadFile(name)
+				file, err := ioutil.ReadFile(name)
 
-				if readErr != nil {
-					level.Warn(logger).Log(
-						"msg", "failed to read custom template",
-						"err", readErr,
-						"file", name,
-					)
+				if err != nil {
+					log.Warn().
+						Err(err).
+						Str("file", name).
+						Msg("failed to read custom template")
 				}
 
-				_, parseErr := tpls.New(
+				tplName := strings.TrimPrefix(
 					strings.TrimPrefix(
-						strings.TrimPrefix(
-							name,
-							config.Server.Static,
-						),
-						"/",
+						name,
+						cfg.Server.Static,
 					),
-				).Parse(
-					string(file),
+					"/",
 				)
 
-				if parseErr != nil {
-					level.Warn(logger).Log(
-						"msg", "failed to parse custom template",
-						"err", parseErr,
-						"file", name,
-					)
+				if _, err := tpls.New(tplName).Parse(string(file)); err != nil {
+					log.Warn().
+						Err(err).
+						Str("file", name).
+						Msg("failed to parse custom template")
 				}
 			}
 		} else {
-			level.Warn(logger).Log(
-				"msg", "custom assets directory doesn't exist",
-			)
+			log.Warn().
+				Msg("custom assets directory doesn't exist")
 		}
 	}
 
@@ -127,12 +111,5 @@ func Load(logger log.Logger) *template.Template {
 
 // Funcs provides some general usefule template helpers.
 func Funcs() template.FuncMap {
-	return template.FuncMap{
-		"split":    strings.Split,
-		"join":     strings.Join,
-		"toUpper":  strings.ToUpper,
-		"toLower":  strings.ToLower,
-		"contains": strings.Contains,
-		"replace":  strings.Replace,
-	}
+	return template.FuncMap{} // sprig.FuncMap()
 }

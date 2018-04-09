@@ -8,8 +8,8 @@ LABEL maintainer="Thomas Boerger <thomas@webhippie.de>" \
 EXPOSE 9000 80 443
 VOLUME ["/var/lib/gopad"]
 
-ENV UMSCHLAG_UI_ASSETS /usr/share/gopad
-ENV UMSCHLAG_UI_STORAGE /var/lib/gopad
+ENV GOPAD_UI_ASSETS /usr/share/gopad
+ENV GOPAD_UI_STORAGE /var/lib/gopad
 
 ENTRYPOINT ["/usr/bin/gopad-ui"]
 CMD ["server"]

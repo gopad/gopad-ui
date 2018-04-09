@@ -2,31 +2,26 @@ package main
 
 import (
 	"os"
-	"runtime"
 	"strings"
 	"time"
 
-	"github.com/go-kit/kit/log"
-	"github.com/go-kit/kit/log/level"
+	"github.com/rs/zerolog/log"
+	"github.com/rs/zerolog"
 	"github.com/joho/godotenv"
 	"github.com/gopad/gopad-ui/pkg/config"
 	"github.com/gopad/gopad-ui/pkg/version"
 	"gopkg.in/urfave/cli.v2"
 )
 
-var (
-	appName = "gopad-ui"
-)
-
 func main() {
-	runtime.GOMAXPROCS(runtime.NumCPU())
+	cfg := config.New()
 
 	if env := os.Getenv("GOPAD_ENV_FILE"); env != "" {
 		godotenv.Load(env)
 	}
 
 	app := &cli.App{
-		Name:     appName,
+		Name:     "gopad-ui",
 		Version:  version.Version.String(),
 		Usage:    "etherpad for markdown with go",
 		Compiled: time.Now(),
@@ -44,13 +39,27 @@ func main() {
 				Value:       "info",
 				Usage:       "set logging level",
 				EnvVars:     []string{"GOPAD_LOG_LEVEL"},
-				Destination: &config.LogLevel,
+				Destination: &cfg.Logs.Level,
+			},
+			&cli.BoolFlag{
+				Name:        "log-colored",
+				Value:       false,
+				Usage:       "enable colored logging",
+				EnvVars:     []string{"KLEISTER_LOG_COLORED"},
+				Destination: &cfg.Logs.Colored,
+			},
+			&cli.BoolFlag{
+				Name:        "log-pretty",
+				Value:       false,
+				Usage:       "enable pretty logging",
+				EnvVars:     []string{"KLEISTER_LOG_PRETTY"},
+				Destination: &cfg.Logs.Pretty,
 			},
 		},
 
 		Commands: []*cli.Command{
-			Server(),
-			Health(),
+			Server(cfg),
+			Health(cfg),
 		},
 	}
 
@@ -71,24 +80,30 @@ func main() {
 	}
 }
 
-func logger() log.Logger {
-	logger := log.NewLogfmtLogger(log.NewSyncWriter(os.Stdout))
-
-	switch strings.ToLower(config.LogLevel) {
+func setupLogger(cfg *config.Config) {
+	switch strings.ToLower(cfg.Logs.Level) {
 	case "debug":
-		logger = level.NewFilter(logger, level.AllowDebug())
+		zerolog.SetGlobalLevel(zerolog.DebugLevel)
+	case "info":
+		zerolog.SetGlobalLevel(zerolog.InfoLevel)
 	case "warn":
-		logger = level.NewFilter(logger, level.AllowWarn())
+		zerolog.SetGlobalLevel(zerolog.WarnLevel)
 	case "error":
-		logger = level.NewFilter(logger, level.AllowError())
+		zerolog.SetGlobalLevel(zerolog.ErrorLevel)
+	case "fatal":
+		zerolog.SetGlobalLevel(zerolog.FatalLevel)
+	case "panic":
+		zerolog.SetGlobalLevel(zerolog.PanicLevel)
 	default:
-		logger = level.NewFilter(logger, level.AllowInfo())
+		zerolog.SetGlobalLevel(zerolog.InfoLevel)
 	}
 
-	logger = log.WithPrefix(logger,
-		"app", appName,
-		"ts", log.DefaultTimestampUTC,
-	)
-
-	return logger
+	if cfg.Logs.Pretty {
+		log.Logger = log.Output(
+			zerolog.ConsoleWriter{
+				Out:     os.Stderr,
+				NoColor: !cfg.Logs.Colored,
+			},
+		)
+	}
 }

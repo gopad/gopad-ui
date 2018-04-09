@@ -5,31 +5,30 @@ import (
 	"os"
 	"path"
 
-	"github.com/go-kit/kit/log"
-	"github.com/go-kit/kit/log/level"
+	"github.com/rs/zerolog/log"
 	"github.com/gopad/gopad-ui/pkg/config"
 )
 
 //go:generate fileb0x ab0x.yaml
 
 // Load initializes the static files.
-func Load(logger log.Logger) http.FileSystem {
+func Load(cfg *config.Config) http.FileSystem {
 	return ChainedFS{
-		logger: logger,
+		config: cfg,
 	}
 }
 
 // ChainedFS is a simple HTTP filesystem including custom path.
 type ChainedFS struct {
-	logger log.Logger
+	config *config.Config
 }
 
 // Open just implements the HTTP filesystem interface.
 func (c ChainedFS) Open(origPath string) (http.File, error) {
-	if config.Server.Static != "" {
-		if stat, err := os.Stat(config.Server.Static); err == nil && stat.IsDir() {
+	if c.config.Server.Static != "" {
+		if stat, err := os.Stat(c.config.Server.Static); err == nil && stat.IsDir() {
 			customPath := path.Join(
-				config.Server.Static,
+				c.config.Server.Static,
 				"assets",
 				origPath,
 			)
@@ -44,9 +43,8 @@ func (c ChainedFS) Open(origPath string) (http.File, error) {
 				return f, nil
 			}
 		} else {
-			level.Warn(c.logger).Log(
-				"msg", "custom assets directory doesn't exist",
-			)
+			log.Warn().
+				Msg("custom assets directory doesn't exist")
 		}
 	}
 

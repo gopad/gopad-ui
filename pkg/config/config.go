@@ -1,24 +1,36 @@
 package config
 
-type server struct {
+// Server defines the server configuration.
+type Server struct {
 	Host          string
-	Addr          string
+	Private          string
+	Public          string
 	Cert          string
 	Key           string
 	Root          string
-	Endpoint      string
 	Static        string
 	Storage       string
-	LetsEncrypt   bool
 	StrictCurves  bool
 	StrictCiphers bool
+	Prometheus   bool
 	Pprof         bool
+	Endpoint      string
 }
 
-var (
-	// LogLevel defines the log level used by our logging package.
-	LogLevel string
+// Logs defines the logging configuration.
+type Logs struct {
+	Level string
+	Colored bool
+	Pretty bool
+}
 
-	// Server represents the informations about the server bindings.
-	Server = &server{}
-)
+// Config defines the general configuration.
+type Config struct {
+	Server Server
+	Logs Logs
+}
+
+// New prepares a new default configuration.
+func New() *Config {
+	return &Config{}
+}

@@ -2,8 +2,6 @@ NAME := gopad-ui
 IMPORT := github.com/gopad/$(NAME)
 DIST := dist
 
-EXECUTABLE := $(NAME)
-
 ifeq ($(OS), Windows_NT)
 	EXECUTABLE := $(NAME).exe
 	HAS_RETOOL := $(shell where retool)
@@ -23,9 +21,9 @@ ifndef VERSION
 		VERSION ?= $(subst v,,$(DRONE_TAG))
 	else
 		ifneq ($(DRONE_BRANCH),)
-			VERSION ?= $(DRONE_BRANCH)
+			VERSION ?= 0.0.0-$(subst /,,$(DRONE_BRANCH))
 		else
-			VERSION ?= master
+			VERSION ?= 0.0.0-master
 		endif
 	endif
 endif
@@ -38,7 +36,7 @@ ifndef DATE
 	DATE := $(shell date -u '+%Y%m%d')
 endif
 
-LDFLAGS += -s -w -X "$(IMPORT)/pkg/version.VersionDev=$(SHA)" -X "$(IMPORT)/pkg/version.VersionDate=$(DATE)"
+LDFLAGS += -s -w -X "$(IMPORT)/pkg/version.VersionString=$(VERSION)" -X "$(IMPORT)/pkg/version.VersionDev=$(SHA)" -X "$(IMPORT)/pkg/version.VersionDate=$(DATE)"
 
 .PHONY: all
 all: build
@@ -49,17 +47,12 @@ update:
 
 .PHONY: sync
 sync:
-	retool sync
 	retool do dep ensure
-
-.PHONY: graph
-graph:
-	retool do dep status -dot | dot -T png -o docs/deps.png
 
 .PHONY: clean
 clean:
 	go clean -i ./...
-	rm -rf $(EXECUTABLE) $(DIST)/binaries $(DIST)/release pkg/assets/ab0x.go
+	rm -rf bin/ $(DIST)/binaries $(DIST)/release pkg/assets/ab0x.go
 
 .PHONY: fmt
 fmt:
@@ -90,9 +83,9 @@ install: $(SOURCES)
 	go install -v -tags '$(TAGS)' -ldflags '$(LDFLAGS)' ./cmd/$(NAME)
 
 .PHONY: build
-build: $(EXECUTABLE)
+build: bin/$(EXECUTABLE)
 
-$(EXECUTABLE): $(SOURCES)
+bin/$(EXECUTABLE): $(SOURCES)
 	go build -i -v -tags '$(TAGS)' -ldflags '$(LDFLAGS)' -o $@ ./cmd/$(NAME)
 
 .PHONY: release
@@ -145,4 +138,5 @@ retool:
 ifndef HAS_RETOOL
 	go get -u github.com/twitchtv/retool
 endif
+	retool sync
 	retool build

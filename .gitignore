@@ -25,7 +25,10 @@ _testmain.go
 
 coverage.out
 
-/gopad-ui
-
+/_tools
+/vendor
+/bin
 /dist
 /node_modules
+
+/pkg/assets/ab0x.go

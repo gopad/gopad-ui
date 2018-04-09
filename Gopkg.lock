@@ -2,6 +2,12 @@
 
 
 [[projects]]
+  branch = "master"
+  name = "github.com/beorn7/perks"
+  packages = ["quantile"]
+  revision = "3a771d992973f24aa725d07868b467d1ddfceafb"
+
+[[projects]]
   name = "github.com/coreos/go-semver"
   packages = ["semver"]
   revision = "8ab6407b697782a06568d4b7f1db25550ec2e4c6"
@@ -9,27 +15,18 @@
 
 [[projects]]
   name = "github.com/go-chi/chi"
-  packages = [".","middleware"]
+  packages = [
+    ".",
+    "middleware"
+  ]
   revision = "e83ac2304db3c50cf03d96a2fcd39009d458bc35"
   version = "v3.3.2"
 
 [[projects]]
-  name = "github.com/go-kit/kit"
-  packages = ["log","log/level"]
-  revision = "4dc7be5d2d12881735283bcab7352178e190fc71"
-  version = "v0.6.0"
-
-[[projects]]
-  name = "github.com/go-logfmt/logfmt"
-  packages = ["."]
-  revision = "390ab7935ee28ec6b286364bba9b4dd6410cb3d5"
-  version = "v0.3.0"
-
-[[projects]]
-  name = "github.com/go-stack/stack"
-  packages = ["."]
-  revision = "259ab82a6cad3992b4e21ff5cac294ccb06474bc"
-  version = "v1.7.0"
+  name = "github.com/golang/protobuf"
+  packages = ["proto"]
+  revision = "925541529c1fa6821df4e44ce2723319eb2be768"
+  version = "v1.0.0"
 
 [[projects]]
   name = "github.com/joho/godotenv"
@@ -38,16 +35,10 @@
   version = "v1.2.0"
 
 [[projects]]
-  branch = "master"
-  name = "github.com/kr/logfmt"
-  packages = ["."]
-  revision = "b84e30acd515aadc4b783ad4ff83aff3299bdfe0"
-
-[[projects]]
-  name = "github.com/oklog/oklog"
-  packages = ["pkg/group"]
-  revision = "2ae37025d0eeba31e5b70420277a9533a9d5e900"
-  version = "v0.3.0"
+  name = "github.com/matttproud/golang_protobuf_extensions"
+  packages = ["pbutil"]
+  revision = "3247c84500bff8d9fb6d579d800f20b3e091582c"
+  version = "v1.0.0"
 
 [[projects]]
   name = "github.com/oklog/run"
@@ -56,26 +47,90 @@
   version = "v1.0.0"
 
 [[projects]]
+  name = "github.com/prometheus/client_golang"
+  packages = [
+    "prometheus",
+    "prometheus/promhttp"
+  ]
+  revision = "c5b7fccd204277076155f10851dad72b76a49317"
+  version = "v0.8.0"
+
+[[projects]]
   branch = "master"
-  name = "golang.org/x/crypto"
-  packages = ["acme","acme/autocert"]
-  revision = "0fcca4842a8d74bfddc2c96a073bd2a4d2a7a2e8"
+  name = "github.com/prometheus/client_model"
+  packages = ["go"]
+  revision = "99fa1f4be8e564e8a6b613da7fa6f46c9edafc6c"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/prometheus/common"
+  packages = [
+    "expfmt",
+    "internal/bitbucket.org/ww/goautoneg",
+    "model"
+  ]
+  revision = "38c53a9f4bfcd932d1b00bfc65e256a7fba6b37a"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/prometheus/procfs"
+  packages = [
+    ".",
+    "internal/util",
+    "nfs",
+    "xfs"
+  ]
+  revision = "8b1c2da0d56deffdbb9e48d4414b4e674bd8083e"
+
+[[projects]]
+  name = "github.com/rs/xid"
+  packages = ["."]
+  revision = "02dd45c33376f85d1064355dc790dcc4850596b1"
+  version = "v1.1"
+
+[[projects]]
+  name = "github.com/rs/zerolog"
+  packages = [
+    ".",
+    "hlog",
+    "internal/cbor",
+    "internal/json",
+    "log"
+  ]
+  revision = "05eafee0eb17d0150591a8f30f0fa592cc9b7471"
+  version = "v1.6.0"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/webhippie/fail"
+  packages = ["."]
+  revision = "579e16d581f0b5a35a7639107c9fc3ebac2c5b52"
+
+[[projects]]
+  name = "github.com/zenazn/goji"
+  packages = ["web/mutil"]
+  revision = "64eb34159fe53473206c2b3e70fe396a639452f2"
+  version = "v1.0"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/net"
-  packages = ["context","webdav","webdav/internal/xml"]
-  revision = "d866cfc389cec985d6fda2859936a575a55a3ab6"
+  packages = [
+    "context",
+    "webdav",
+    "webdav/internal/xml"
+  ]
+  revision = "61147c48b25b599e5b561d2e9c4f3e1ef489ca41"
 
 [[projects]]
   branch = "v2"
   name = "gopkg.in/urfave/cli.v2"
   packages = ["."]
-  revision = "b2bf3c5abeb90da407891aecd1df2c5a1f6170c1"
+  revision = "d3ae77c26ac8db90639677e4831a728d33c36111"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "bd21e9a49351ab58af3ad4ef9ce32095aed5fea1965e1808ba14227ffc0e13e1"
+  inputs-digest = "4b9eb9384759fcd649d539097239a9758dad91a4c74d71ff842f48497e161e6f"
   solver-name = "gps-cdcl"
   solver-version = 1
