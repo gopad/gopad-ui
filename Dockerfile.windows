@@ -16,4 +16,4 @@ ENTRYPOINT ["c:\\gopad-ui.exe"]
 CMD ["server"]
 
 COPY dist/static c:\assets
-COPY gopad-ui.exe c:\gopad-ui.exe
+COPY bin/gopad-ui.exe c:\gopad-ui.exe
