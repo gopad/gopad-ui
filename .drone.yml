@@ -121,7 +121,6 @@ pipeline:
       - make release-dirs release-windows
     when:
       event: [ push, tag ]
-      branch: master
 
   backend-linux:
     image: karalabe/xgo-latest:latest
@@ -135,7 +134,6 @@ pipeline:
       - make release-dirs release-linux
     when:
       event: [ push, tag ]
-      branch: master
 
   backend-darwin:
     image: karalabe/xgo-latest:latest
@@ -149,7 +147,6 @@ pipeline:
       - make release-dirs release-darwin
     when:
       event: [ push, tag ]
-      branch: master
 
   backend-finish:
     image: webhippie/golang:edge
@@ -162,7 +159,27 @@ pipeline:
       - make release-copy release-check
     when:
       event: [ push, tag ]
-      branch: master
+
+  backend-gpgsign:
+    image: plugins/gpgsign:1
+    pull: true
+    secrets: [ gpgsign_key, gpgsign_passphrase ]
+    detach_sign: true
+    files:
+      - dist/release/*-amd64
+      - dist/release/*-386
+      - dist/release/*-arm64
+      - dist/release/*-arm-5
+      - dist/release/*-arm-6
+      - dist/release/*-arm-7
+      - dist/release/*-mips
+      - dist/release/*-mips64
+      - dist/release/*-mipsle
+      - dist/release/*-mips64le
+      - dist/release/*-amd64.exe
+      - dist/release/*-386.exe
+    when:
+      event: [ push, tag ]
 
   docker-amd64:
     image: plugins/docker:17.05
@@ -173,8 +190,7 @@ pipeline:
     auto_tag: true
     auto_tag_suffix: amd64
     when:
-      event: [push, tag]
-      branch: master
+      event: [ push, tag ]
 
   docker-i386:
     image: plugins/docker:17.05
@@ -186,8 +202,7 @@ pipeline:
     auto_tag: true
     auto_tag_suffix: i386
     when:
-      event: [push, tag]
-      branch: master
+      event: [ push, tag ]
 
   docker-arm64:
     image: plugins/docker:17.05
@@ -199,8 +214,7 @@ pipeline:
     auto_tag: true
     auto_tag_suffix: arm64
     when:
-      event: [push, tag]
-      branch: master
+      event: [ push, tag ]
 
   docker-arm:
     image: plugins/docker:17.05
@@ -212,8 +226,7 @@ pipeline:
     auto_tag: true
     auto_tag_suffix: arm
     when:
-      event: [push, tag]
-      branch: master
+      event: [ push, tag ]
 
   docker-manifests:
     image: plugins/manifest:1
@@ -224,7 +237,6 @@ pipeline:
     ignore_missing: true
     when:
       event: [ push, tag ]
-      branch: master
 
   docker-microbadger:
     image: plugins/webhook:1
@@ -234,7 +246,6 @@ pipeline:
         target: plugin_urls
     when:
       event: [ push, tag ]
-      branch: master
 
   cache-rebuild:
     image: plugins/s3-cache:1
@@ -248,7 +259,6 @@ pipeline:
     when:
       local: false
       event: [ push ]
-      branch: master
 
   cache-flush:
     image: plugins/s3-cache:1
@@ -259,7 +269,6 @@ pipeline:
     when:
       local: false
       event: [ push ]
-      branch: master
 
   archive-release:
     image: plugins/s3:1
@@ -271,7 +280,6 @@ pipeline:
     path_style: true
     when:
       event: [ push ]
-      branch: master
 
   archive-release:
     image: plugins/s3:1
@@ -283,7 +291,6 @@ pipeline:
     path_style: true
     when:
       event: [ tag ]
-      branch: master
 
   github-release:
     image: plugins/github-release:1
@@ -293,7 +300,6 @@ pipeline:
       - dist/release/*
     when:
       event: [ tag ]
-      branch: master
 
   notify-matrix:
     image: plugins/matrix:1
