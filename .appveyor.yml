@@ -22,7 +22,7 @@ install:
 
 build_script:
   - cmd: |
-      yarn install
+      yarn install --frozen-lockfile
   - cmd: |
       yarn build
   - cmd: |
@@ -64,6 +64,8 @@ deploy_script:
         } else {
           if ( $env:APPVEYOR_REPO_BRANCH -eq 'master' ) {
             docker push gopad/gopad-ui:windows
+          } else {
+            Write-Host Ignoring feature branch.
           }
         }
       }
