@@ -12,10 +12,9 @@ environment:
 
 install:
   - ps: |
-      Install-Product node ''
-  - ps: |
       choco install make
   - ps: |
+      node -v
       docker version
       go version
   - ps: |
