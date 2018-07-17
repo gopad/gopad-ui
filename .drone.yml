@@ -266,7 +266,7 @@ pipeline:
     pull: true
     secrets: [ s3_endpoint, aws_access_key_id, aws_secret_access_key, s3_bucket ]
     source: dist/release/*
-    target: /gopad/ui/master
+    target: /ui/master
     strip_prefix: dist/release/
     path_style: true
     when:
@@ -277,7 +277,7 @@ pipeline:
     pull: true
     secrets: [ s3_endpoint, aws_access_key_id, aws_secret_access_key, s3_bucket ]
     source: dist/release/*
-    target: /gopad/ui/${DRONE_TAG##v}
+    target: /ui/${DRONE_TAG##v}
     strip_prefix: dist/release/
     path_style: true
     when:
