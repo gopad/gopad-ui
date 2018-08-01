@@ -1,6 +1,6 @@
 # Gopad: Web UI
 
-[![Build Status](http://github.dronehippie.de/api/badges/gopad/gopad-ui/status.svg)](http://github.dronehippie.de/gopad/gopad-ui)
+[![Build Status](http://drone.gopad.tech/api/badges/gopad/gopad-ui/status.svg)](http://drone.gopad.tech/gopad/gopad-ui)
 [![Stories in Ready](https://badge.waffle.io/gopad/gopad-api.svg?label=ready&title=Ready)](http://waffle.io/gopad/gopad-api)
 [![Join the Matrix chat at https://matrix.to/#/#gopad:matrix.org](https://img.shields.io/badge/matrix-%23gopad%3Amatrix.org-7bc9a4.svg)](https://matrix.to/#/#gopad:matrix.org)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/2e41fc2d144c45c18832412c714dcea1)](https://www.codacy.com/app/gopad/gopad-ui?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=gopad/gopad-ui&amp;utm_campaign=Badge_Grade)
