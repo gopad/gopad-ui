@@ -123,8 +123,14 @@ else
 endif
 
 .PHONY: release-copy
-release-copy:
+release-copy: $(DIST)/release/static.tar.gz $(DIST)/release/static.zip
 	$(foreach file,$(wildcard $(DIST)/binaries/$(EXECUTABLE)-*),cp $(file) $(DIST)/release/$(notdir $(file));)
+
+$(DIST)/release/static.tar.gz:
+	cp -f $(DIST)/static.tar.gz $@
+
+$(DIST)/release/static.zip:
+	cp -f $(DIST)/static.zip $@
 
 .PHONY: release-check
 release-check:
