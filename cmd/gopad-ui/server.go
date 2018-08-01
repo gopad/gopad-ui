@@ -3,21 +3,21 @@ package main
 import (
 	"context"
 	"crypto/tls"
+	"io"
 	"net/http"
 	"os"
 	"os/signal"
 	"time"
-	"io"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
-	"github.com/rs/zerolog/log"
-	"github.com/rs/zerolog/hlog"
-	"github.com/oklog/run"
 	"github.com/gopad/gopad-ui/pkg/config"
 	"github.com/gopad/gopad-ui/pkg/handler"
 	"github.com/gopad/gopad-ui/pkg/middleware/header"
+	"github.com/oklog/run"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"github.com/rs/zerolog/hlog"
+	"github.com/rs/zerolog/log"
 	"gopkg.in/urfave/cli.v2"
 )
 
@@ -66,13 +66,6 @@ func Server(cfg *config.Config) *cli.Command {
 				Usage:       "folder for serving assets",
 				EnvVars:     []string{"GOPAD_UI_STATIC"},
 				Destination: &cfg.Server.Static,
-			},
-			&cli.StringFlag{
-				Name:        "storage-path",
-				Value:       "storage/",
-				Usage:       "folder for storing uploads",
-				EnvVars:     []string{"GOPAD_UI_STORAGE"},
-				Destination: &cfg.Server.Storage,
 			},
 			&cli.BoolFlag{
 				Name:        "enable-pprof",
@@ -160,7 +153,7 @@ func server(cfg *config.Config) cli.ActionFunc {
 					Handler:      router(cfg),
 					ReadTimeout:  5 * time.Second,
 					WriteTimeout: 10 * time.Second,
-					TLSConfig:    &tls.Config{
+					TLSConfig: &tls.Config{
 						PreferServerCipherSuites: true,
 						MinVersion:               tls.VersionTLS12,
 						CurvePreferences:         curves(cfg),
@@ -286,13 +279,13 @@ func router(cfg *config.Config) *chi.Mux {
 	mux.Use(hlog.RequestIDHandler("request_id", "Request-Id"))
 
 	mux.Use(hlog.AccessHandler(func(r *http.Request, status, size int, duration time.Duration) {
-	    hlog.FromRequest(r).Debug().
-	        Str("method", r.Method).
-	        Str("url", r.URL.String()).
-	        Int("status", status).
-	        Int("size", size).
-	        Dur("duration", duration).
-	        Msg("")
+		hlog.FromRequest(r).Debug().
+			Str("method", r.Method).
+			Str("url", r.URL.String()).
+			Int("status", status).
+			Int("size", size).
+			Dur("duration", duration).
+			Msg("")
 	}))
 
 	mux.Use(middleware.Timeout(60 * time.Second))

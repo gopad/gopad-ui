@@ -5,8 +5,8 @@ import (
 	"os"
 	"path"
 
-	"github.com/rs/zerolog/log"
 	"github.com/gopad/gopad-ui/pkg/config"
+	"github.com/rs/zerolog/log"
 )
 
 //go:generate fileb0x ab0x.yaml

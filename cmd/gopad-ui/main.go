@@ -5,11 +5,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rs/zerolog/log"
-	"github.com/rs/zerolog"
-	"github.com/joho/godotenv"
 	"github.com/gopad/gopad-ui/pkg/config"
 	"github.com/gopad/gopad-ui/pkg/version"
+	"github.com/joho/godotenv"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 	"gopkg.in/urfave/cli.v2"
 )
 

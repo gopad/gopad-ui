@@ -3,31 +3,30 @@ package config
 // Server defines the server configuration.
 type Server struct {
 	Host          string
-	Private          string
-	Public          string
+	Private       string
+	Public        string
 	Cert          string
 	Key           string
 	Root          string
 	Static        string
-	Storage       string
 	StrictCurves  bool
 	StrictCiphers bool
-	Prometheus   bool
+	Prometheus    bool
 	Pprof         bool
 	Endpoint      string
 }
 
 // Logs defines the logging configuration.
 type Logs struct {
-	Level string
+	Level   string
 	Colored bool
-	Pretty bool
+	Pretty  bool
 }
 
 // Config defines the general configuration.
 type Config struct {
 	Server Server
-	Logs Logs
+	Logs   Logs
 }
 
 // New prepares a new default configuration.

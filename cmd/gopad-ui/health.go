@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/rs/zerolog/log"
 	"github.com/gopad/gopad-ui/pkg/config"
+	"github.com/rs/zerolog/log"
 	"gopkg.in/urfave/cli.v2"
 )
 
