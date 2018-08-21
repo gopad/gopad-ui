@@ -34,11 +34,11 @@ build_script:
   - cmd: |
       make build
   - cmd: |
-      docker build -f Dockerfile.windows -t gopad/gopad-ui:windows .
+      docker build -f docker/Dockerfile.windows.amd64 -t gopad/gopad-ui:windows-amd64 .
 
 test_script:
   - cmd: |
-      docker run --rm gopad/gopad-ui:windows --help
+      docker run --rm gopad/gopad-ui:windows-amd64 --help
 
 deploy_script:
   - ps: |
@@ -50,19 +50,19 @@ deploy_script:
         if ( $env:APPVEYOR_REPO_TAG -eq 'true' ) {
           $major,$minor,$patch = $env:APPVEYOR_REPO_TAG_NAME.substring(1).split('.')
 
-          docker push gopad/gopad-ui:windows
+          docker push gopad/gopad-ui:windows-amd64
 
-          docker tag gopad/gopad-ui:windows gopad/gopad-ui:$major.$minor.$patch-windows
-          docker push gopad/gopad-ui:$major.$minor.$patch-windows
+          docker tag gopad/gopad-ui:windows-amd64 gopad/gopad-ui:$major.$minor.$patch-windows-amd64
+          docker push gopad/gopad-ui:$major.$minor.$patch-windows-amd64
 
-          docker tag gopad/gopad-ui:windows gopad/gopad-ui:$major.$minor-windows
-          docker push gopad/gopad-ui:$major.$minor-windows
+          docker tag gopad/gopad-ui:windows-amd64 gopad/gopad-ui:$major.$minor-windows-amd64
+          docker push gopad/gopad-ui:$major.$minor-windows-amd64
 
-          docker tag gopad/gopad-ui:windows gopad/gopad-ui:$major-windows
-          docker push gopad/gopad-ui:$major-windows
+          docker tag gopad/gopad-ui:windows-amd64 gopad/gopad-ui:$major-windows-amd64
+          docker push gopad/gopad-ui:$major-windows-amd64
         } else {
           if ( $env:APPVEYOR_REPO_BRANCH -eq 'master' ) {
-            docker push gopad/gopad-ui:windows
+            docker push gopad/gopad-ui:windows-amd64
           } else {
             Write-Host Ignoring feature branch.
           }
