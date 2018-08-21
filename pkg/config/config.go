@@ -1,35 +1,41 @@
 package config
 
-// Server defines the server configuration.
+// Server defines the webserver configuration.
 type Server struct {
-	Host          string
-	Private       string
-	Public        string
-	Cert          string
-	Key           string
-	Root          string
-	Static        string
-	StrictCurves  bool
-	StrictCiphers bool
-	Prometheus    bool
-	Pprof         bool
-	Endpoint      string
+	Host   string
+	Root   string
+	Addr   string
+	Static string
+	Pprof  bool
 }
 
-// Logs defines the logging configuration.
+// API defines the api server configuration.
+type API struct {
+	Endpoint string
+}
+
+// Metrics defines the metrics server configuration.
+type Metrics struct {
+	Addr  string
+	Token string
+}
+
+// Logs defines the level and color for log configuration.
 type Logs struct {
-	Level   string
-	Colored bool
-	Pretty  bool
+	Level  string
+	Pretty bool
+	Color  bool
 }
 
-// Config defines the general configuration.
+// Config is a combination of all available configurations.
 type Config struct {
-	Server Server
-	Logs   Logs
+	Server  Server
+	API     API
+	Metrics Metrics
+	Logs    Logs
 }
 
-// New prepares a new default configuration.
-func New() *Config {
+// Load initializes a default configuration struct.
+func Load() *Config {
 	return &Config{}
 }

@@ -12,28 +12,39 @@ import (
 // Health provides the sub-command to perform a health check.
 func Health(cfg *config.Config) *cli.Command {
 	return &cli.Command{
-		Name:  "health",
-		Usage: "perform health checks for ui",
-		Flags: []cli.Flag{
-			&cli.StringFlag{
-				Name:        "ui-private",
-				Value:       privateAddr,
-				Usage:       "private address to the ui",
-				EnvVars:     []string{"GOPAD_UI_PRIVATE"},
-				Destination: &cfg.Server.Private,
-			},
-		},
-		Before: before(cfg),
-		Action: health(cfg),
+		Name:   "health",
+		Usage:  "perform health checks",
+		Flags:  healthFlags(cfg),
+		Before: healthBefore(cfg),
+		Action: healthAction(cfg),
 	}
 }
 
-func health(cfg *config.Config) cli.ActionFunc {
+func healthFlags(cfg *config.Config) []cli.Flag {
+	return []cli.Flag{
+		&cli.StringFlag{
+			Name:        "metrics-addr",
+			Value:       "0.0.0.0:9010",
+			Usage:       "address to bind the metrics",
+			EnvVars:     []string{"GOPAD_UI_METRICS_ADDR"},
+			Destination: &cfg.Metrics.Addr,
+		},
+	}
+}
+
+func healthBefore(cfg *config.Config) cli.BeforeFunc {
+	return func(c *cli.Context) error {
+		setupLogger(cfg)
+		return nil
+	}
+}
+
+func healthAction(cfg *config.Config) cli.ActionFunc {
 	return func(c *cli.Context) error {
 		resp, err := http.Get(
 			fmt.Sprintf(
 				"http://%s/healthz",
-				cfg.Server.Private,
+				cfg.Metrics.Addr,
 			),
 		)
 
@@ -49,8 +60,8 @@ func health(cfg *config.Config) cli.ActionFunc {
 
 		if resp.StatusCode != 200 {
 			log.Error().
-				Err(err).
-				Msg("health seems to be in a bad state")
+				Int("code", resp.StatusCode).
+				Msg("health seems to be in bad state")
 
 			return err
 		}

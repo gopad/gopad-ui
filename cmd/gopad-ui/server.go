@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"crypto/tls"
 	"io"
 	"net/http"
 	"os"
@@ -14,240 +13,157 @@ import (
 	"github.com/gopad/gopad-ui/pkg/config"
 	"github.com/gopad/gopad-ui/pkg/handler"
 	"github.com/gopad/gopad-ui/pkg/middleware/header"
+	"github.com/gopad/gopad-ui/pkg/middleware/prometheus"
 	"github.com/oklog/run"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/rs/zerolog/hlog"
 	"github.com/rs/zerolog/log"
 	"gopkg.in/urfave/cli.v2"
 )
 
-var (
-	defaultAddr = "0.0.0.0:9000"
-	privateAddr = "127.0.0.1:9001"
-)
-
 // Server provides the sub-command to start the server.
 func Server(cfg *config.Config) *cli.Command {
 	return &cli.Command{
-		Name:  "server",
-		Usage: "start integrated server",
-		Flags: []cli.Flag{
-			&cli.StringFlag{
-				Name:        "ui-host",
-				Value:       "http://localhost:9000",
-				Usage:       "external access to ui",
-				EnvVars:     []string{"GOPAD_UI_HOST"},
-				Destination: &cfg.Server.Host,
-			},
-			&cli.StringFlag{
-				Name:        "ui-private",
-				Value:       privateAddr,
-				Usage:       "private addess to the ui",
-				EnvVars:     []string{"GOPAD_UI_PRIVATE"},
-				Destination: &cfg.Server.Private,
-			},
-			&cli.StringFlag{
-				Name:        "ui-public",
-				Value:       defaultAddr,
-				Usage:       "public addess to the ui",
-				EnvVars:     []string{"GOPAD_UI_PUBLIC"},
-				Destination: &cfg.Server.Public,
-			},
-			&cli.StringFlag{
-				Name:        "ui-root",
-				Value:       "/",
-				Usage:       "root folder of the ui",
-				EnvVars:     []string{"GOPAD_UI_ROOT"},
-				Destination: &cfg.Server.Root,
-			},
-			&cli.StringFlag{
-				Name:        "static-path",
-				Value:       "",
-				Usage:       "folder for serving assets",
-				EnvVars:     []string{"GOPAD_UI_STATIC"},
-				Destination: &cfg.Server.Static,
-			},
-			&cli.BoolFlag{
-				Name:        "enable-pprof",
-				Value:       false,
-				Usage:       "enable pprof debugging server",
-				EnvVars:     []string{"GOPAD_UI_PPROF"},
-				Destination: &cfg.Server.Pprof,
-			},
-			&cli.BoolFlag{
-				Name:        "enable-prometheus",
-				Value:       false,
-				Usage:       "enable prometheus endpoint",
-				EnvVars:     []string{"GOPAD_UI_PROMETHEUS"},
-				Destination: &cfg.Server.Prometheus,
-			},
-			&cli.StringFlag{
-				Name:        "ui-cert",
-				Value:       "",
-				Usage:       "path to ssl cert",
-				EnvVars:     []string{"GOPAD_UI_CERT"},
-				Destination: &cfg.Server.Cert,
-			},
-			&cli.StringFlag{
-				Name:        "ui-key",
-				Value:       "",
-				Usage:       "path to ssl key",
-				EnvVars:     []string{"GOPAD_UI_KEY"},
-				Destination: &cfg.Server.Key,
-			},
-			&cli.BoolFlag{
-				Name:        "strict-curves",
-				Value:       false,
-				Usage:       "use strict ssl curves",
-				EnvVars:     []string{"GOPAD_STRICT_CURVES"},
-				Destination: &cfg.Server.StrictCurves,
-			},
-			&cli.BoolFlag{
-				Name:        "strict-ciphers",
-				Value:       false,
-				Usage:       "use strict ssl ciphers",
-				EnvVars:     []string{"GOPAD_STRICT_CIPHERS"},
-				Destination: &cfg.Server.StrictCiphers,
-			},
-			&cli.StringFlag{
-				Name:        "server-endpoint",
-				Value:       "http://localhost:8000",
-				Usage:       "url for the api server",
-				EnvVars:     []string{"GOPAD_UI_ENDPOINT"},
-				Destination: &cfg.Server.Endpoint,
-			},
-		},
-		Before: before(cfg),
-		Action: server(cfg),
+		Name:   "server",
+		Usage:  "start integrated server",
+		Flags:  serverFlags(cfg),
+		Before: serverBefore(cfg),
+		Action: serverAction(cfg),
 	}
 }
 
-func before(cfg *config.Config) cli.BeforeFunc {
+func serverFlags(cfg *config.Config) []cli.Flag {
+	return []cli.Flag{
+		&cli.StringFlag{
+			Name:        "metrics-addr",
+			Value:       "0.0.0.0:8090",
+			Usage:       "address to bind the metrics",
+			EnvVars:     []string{"GOPAD_UI_METRICS_ADDR"},
+			Destination: &cfg.Metrics.Addr,
+		},
+		&cli.StringFlag{
+			Name:        "metrics-token",
+			Value:       "",
+			Usage:       "token to make metrics secure",
+			EnvVars:     []string{"GOPAD_UI_METRICS_TOKEN"},
+			Destination: &cfg.Metrics.Token,
+		},
+		&cli.StringFlag{
+			Name:        "ui-addr",
+			Value:       "0.0.0.0:8080",
+			Usage:       "address to bind the ui",
+			EnvVars:     []string{"GOPAD_UI_SERVER_ADDR"},
+			Destination: &cfg.Server.Addr,
+		},
+		&cli.BoolFlag{
+			Name:        "ui-pprof",
+			Value:       false,
+			Usage:       "enable pprof debugging",
+			EnvVars:     []string{"GOPAD_UI_SERVER_PPROF"},
+			Destination: &cfg.Server.Pprof,
+		},
+		&cli.StringFlag{
+			Name:        "ui-host",
+			Value:       "http://localhost:8080",
+			Usage:       "external access to ui",
+			EnvVars:     []string{"GOPAD_UI_SERVER_HOST"},
+			Destination: &cfg.Server.Host,
+		},
+		&cli.StringFlag{
+			Name:        "ui-root",
+			Value:       "/",
+			Usage:       "path to access the ui",
+			EnvVars:     []string{"GOPAD_UI_SERVER_ROOT"},
+			Destination: &cfg.Server.Root,
+		},
+		&cli.StringFlag{
+			Name:        "static-path",
+			Value:       "",
+			Usage:       "folder for serving assets",
+			EnvVars:     []string{"GOPAD_UI_STATIC_PATH"},
+			Destination: &cfg.Server.Static,
+		},
+		&cli.StringFlag{
+			Name:        "api-endpoint",
+			Value:       "http://localhost:8000",
+			Usage:       "url for the api server",
+			EnvVars:     []string{"GOPAD_UI_API_ENDPOINT"},
+			Destination: &cfg.API.Endpoint,
+		},
+	}
+}
+
+func serverBefore(cfg *config.Config) cli.BeforeFunc {
 	return func(c *cli.Context) error {
 		setupLogger(cfg)
 		return nil
 	}
 }
 
-func server(cfg *config.Config) cli.ActionFunc {
+func serverAction(cfg *config.Config) cli.ActionFunc {
 	return func(c *cli.Context) error {
 		var gr run.Group
 
-		if cfg.Server.Cert != "" && cfg.Server.Key != "" {
-			cert, err := tls.LoadX509KeyPair(
-				cfg.Server.Cert,
-				cfg.Server.Key,
-			)
-
-			if err != nil {
-				log.Error().
-					Err(err).
-					Msg("failed to load certificates")
-
-				return err
-			}
-
-			{
-				server := &http.Server{
-					Addr:         cfg.Server.Public,
-					Handler:      router(cfg),
-					ReadTimeout:  5 * time.Second,
-					WriteTimeout: 10 * time.Second,
-					TLSConfig: &tls.Config{
-						PreferServerCipherSuites: true,
-						MinVersion:               tls.VersionTLS12,
-						CurvePreferences:         curves(cfg),
-						CipherSuites:             ciphers(cfg),
-						Certificates:             []tls.Certificate{cert},
-					},
-				}
-
-				gr.Add(func() error {
-					log.Info().
-						Str("addr", cfg.Server.Public).
-						Msg("starting https server")
-
-					return server.ListenAndServeTLS("", "")
-				}, func(reason error) {
-					ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-					defer cancel()
-
-					if err := server.Shutdown(ctx); err != nil {
-						log.Error().
-							Err(err).
-							Msg("failed to shutdown https server gracefully")
-
-						return
-					}
-
-					log.Info().
-						Err(reason).
-						Msg("https server shutdown gracefully")
-				})
-			}
-		} else {
-			{
-				server := &http.Server{
-					Addr:         cfg.Server.Public,
-					Handler:      router(cfg),
-					ReadTimeout:  5 * time.Second,
-					WriteTimeout: 10 * time.Second,
-				}
-
-				gr.Add(func() error {
-					log.Info().
-						Str("addr", cfg.Server.Public).
-						Msg("starting http server")
-
-					return server.ListenAndServe()
-				}, func(reason error) {
-					ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-					defer cancel()
-
-					if err := server.Shutdown(ctx); err != nil {
-						log.Error().
-							Err(err).
-							Msg("failed to shutdown http server gracefully")
-
-						return
-					}
-
-					log.Info().
-						Err(reason).
-						Msg("http server shutdown gracefully")
-				})
-			}
-		}
-
 		{
 			server := &http.Server{
-				Addr:         cfg.Server.Private,
-				Handler:      status(cfg),
+				Addr:         cfg.Server.Addr,
+				Handler:      router(cfg),
 				ReadTimeout:  5 * time.Second,
 				WriteTimeout: 10 * time.Second,
 			}
 
 			gr.Add(func() error {
 				log.Info().
-					Str("addr", cfg.Server.Private).
-					Msg("starting status server")
+					Str("addr", cfg.Server.Addr).
+					Msg("starting http server")
 
 				return server.ListenAndServe()
 			}, func(reason error) {
-				ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+				ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 				defer cancel()
 
 				if err := server.Shutdown(ctx); err != nil {
 					log.Error().
 						Err(err).
-						Msg("failed to shutdown status server gracefully")
+						Msg("failed to shutdown http gracefully")
 
 					return
 				}
 
 				log.Info().
 					Err(reason).
-					Msg("status server shutdown gracefully")
+					Msg("http shutdown gracefully")
+			})
+		}
+
+		{
+			server := &http.Server{
+				Addr:         cfg.Metrics.Addr,
+				Handler:      metrics(cfg),
+				ReadTimeout:  5 * time.Second,
+				WriteTimeout: 10 * time.Second,
+			}
+
+			gr.Add(func() error {
+				log.Info().
+					Str("addr", cfg.Metrics.Addr).
+					Msg("starting metrics server")
+
+				return server.ListenAndServe()
+			}, func(reason error) {
+				ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+				defer cancel()
+
+				if err := server.Shutdown(ctx); err != nil {
+					log.Error().
+						Err(err).
+						Msg("failed to shutdown metrics gracefully")
+
+					return
+				}
+
+				log.Info().
+					Err(reason).
+					Msg("metrics shutdown gracefully")
 			})
 		}
 
@@ -288,9 +204,7 @@ func router(cfg *config.Config) *chi.Mux {
 			Msg("")
 	}))
 
-	mux.Use(middleware.Timeout(60 * time.Second))
 	mux.Use(middleware.RealIP)
-
 	mux.Use(header.Version)
 	mux.Use(header.Cache)
 	mux.Use(header.Secure)
@@ -309,7 +223,7 @@ func router(cfg *config.Config) *chi.Mux {
 	return mux
 }
 
-func status(cfg *config.Config) *chi.Mux {
+func metrics(cfg *config.Config) *chi.Mux {
 	mux := chi.NewRouter()
 
 	mux.Use(hlog.NewHandler(log.Logger))
@@ -318,18 +232,14 @@ func status(cfg *config.Config) *chi.Mux {
 	mux.Use(hlog.MethodHandler("method"))
 	mux.Use(hlog.RequestIDHandler("request_id", "Request-Id"))
 
-	mux.Use(middleware.Timeout(60 * time.Second))
 	mux.Use(middleware.RealIP)
-
 	mux.Use(header.Version)
 	mux.Use(header.Cache)
 	mux.Use(header.Secure)
 	mux.Use(header.Options)
 
 	mux.Route("/", func(root chi.Router) {
-		if cfg.Server.Prometheus {
-			root.Mount("/metrics", promhttp.Handler())
-		}
+		root.Get("/metrics", prometheus.Handler(cfg.Metrics.Token))
 
 		root.Get("/healthz", func(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("Content-Type", "text/plain")
@@ -347,29 +257,4 @@ func status(cfg *config.Config) *chi.Mux {
 	})
 
 	return mux
-}
-
-func curves(cfg *config.Config) []tls.CurveID {
-	if cfg.Server.StrictCurves {
-		return []tls.CurveID{
-			tls.CurveP521,
-			tls.CurveP384,
-			tls.CurveP256,
-		}
-	}
-
-	return nil
-}
-
-func ciphers(cfg *config.Config) []uint16 {
-	if cfg.Server.StrictCiphers {
-		return []uint16{
-			tls.TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,
-			tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
-			tls.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
-			tls.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
-		}
-	}
-
-	return nil
 }

@@ -2,7 +2,7 @@
 watch_all = true
 watch_dirs = ["cmd", "pkg"]
 watch_exts = [".go"]
-ignore = [".git", "dist", "node_modules", "src"]
+ignore = [".git", "bin", "dist", "node_modules", "src"]
 ignore_files = []
 build_delay = 1500
 interrupt_timout = 15
@@ -14,7 +14,6 @@ init_cmds = [
     "./bin/gopad-ui",
     "--log-level",
     "debug",
-    "--log-pretty",
     "server",
     "--static-path",
     "dist/static/"
@@ -27,7 +26,6 @@ cmds = [
     "./bin/gopad-ui",
     "--log-level",
     "debug",
-    "--log-pretty",
     "server",
     "--static-path",
     "dist/static/"

@@ -30,6 +30,6 @@ func Index(cfg *config.Config) http.HandlerFunc {
 func vars(cfg *config.Config) map[string]string {
 	return map[string]string{
 		"Root":     cfg.Server.Root,
-		"Endpoint": cfg.Server.Endpoint,
+		"Endpoint": cfg.API.Endpoint,
 	}
 }
