@@ -178,8 +178,9 @@ pipeline:
     group: docker
     secrets: [ docker_username, docker_password ]
     repo: gopad/gopad-ui
+    dockerfile: docker/Dockerfile.linux.amd64
     auto_tag: true
-    auto_tag_suffix: amd64
+    auto_tag_suffix: linux-amd64
     when:
       event: [ push, tag ]
 
@@ -189,33 +190,45 @@ pipeline:
     group: docker
     secrets: [ docker_username, docker_password ]
     repo: gopad/gopad-ui
-    dockerfile: Dockerfile.i386
+    dockerfile: docker/Dockerfile.linux.i386
     auto_tag: true
-    auto_tag_suffix: i386
+    auto_tag_suffix: linux-i386
     when:
       event: [ push, tag ]
 
-  docker-arm64:
+  docker-arm64v8:
     image: plugins/docker:17.05
     pull: true
     group: docker
     secrets: [ docker_username, docker_password ]
     repo: gopad/gopad-ui
-    dockerfile: Dockerfile.arm64
+    dockerfile: docker/Dockerfile.linux.arm64v8
     auto_tag: true
-    auto_tag_suffix: arm64
+    auto_tag_suffix: linux-arm64v8
     when:
       event: [ push, tag ]
 
-  docker-arm:
+  docker-arm32v7:
     image: plugins/docker:17.05
     pull: true
     group: docker
     secrets: [ docker_username, docker_password ]
     repo: gopad/gopad-ui
-    dockerfile: Dockerfile.arm
+    dockerfile: docker/Dockerfile.linux.arm32v7
     auto_tag: true
-    auto_tag_suffix: arm
+    auto_tag_suffix: linux-arm32v7
+    when:
+      event: [ push, tag ]
+
+  docker-arm32v6:
+    image: plugins/docker:17.05
+    pull: true
+    group: docker
+    secrets: [ docker_username, docker_password ]
+    repo: gopad/gopad-ui
+    dockerfile: docker/Dockerfile.linux.arm32v6
+    auto_tag: true
+    auto_tag_suffix: linux-arm32v6
     when:
       event: [ push, tag ]
 
@@ -223,7 +236,7 @@ pipeline:
     image: plugins/manifest:1
     pull: true
     secrets: [ docker_username, docker_password ]
-    spec: manifest.yml
+    spec: manifest.tmpl
     auto_tag: true
     ignore_missing: true
     when:
