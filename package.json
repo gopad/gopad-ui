@@ -43,7 +43,7 @@
     "vue-template-compiler": "2.5.16",
     "webpack": "4.29.0",
     "webpack-archive-plugin": "3.0.0",
-    "webpack-dev-server": "3.1.14"
+    "webpack-dev-server": "3.3.1"
   },
   "dependencies": {
     "@getable/lato": "1.0.1",
