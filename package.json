@@ -41,7 +41,7 @@
     "rimraf": "2.6.3",
     "vue-loader": "15.6.2",
     "vue-template-compiler": "2.5.16",
-    "webpack": "4.29.0",
+    "webpack": "4.30.0",
     "webpack-archive-plugin": "3.0.0",
     "webpack-dev-server": "3.1.14"
   },
