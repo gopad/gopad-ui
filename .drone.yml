@@ -25,12 +25,6 @@ steps:
   commands:
     - yarn test:unit
 
-- name: frontend-e2e
-  image: webhippie/nodejs:latest
-  pull: always
-  commands:
-    - yarn test:e2e --headless
-
 - name: frontend-build
   image: webhippie/nodejs:latest
   pull: always
@@ -133,6 +127,8 @@ steps:
   pull: always
   commands:
     - yarn build
+  depends_on:
+  - frontend-deps
 
 - name: generate
   image: webhippie/golang:1.12
@@ -144,6 +140,8 @@ steps:
   volumes:
   - name: gopath
     path: /srv/app
+  depends_on:
+  - frontend-build
 
 - name: build
   image: webhippie/golang:1.12
