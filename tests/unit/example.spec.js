@@ -1,13 +1,10 @@
 import { expect } from 'chai';
 import { shallowMount } from '@vue/test-utils';
-import HelloWorld from '@/components/HelloWorld.vue';
+import Foot from '@/components/foot/index.vue';
 
-describe('HelloWorld.vue', () => {
-  it('renders props.msg when passed', () => {
-    const msg = 'new message';
-    const wrapper = shallowMount(HelloWorld, {
-      propsData: { msg },
-    });
-    expect(wrapper.text()).to.include(msg);
+describe('Foot.vue', () => {
+  it('renders properly', () => {
+    const wrapper = shallowMount(Foot);
+    expect(wrapper.text()).to.include('Copyright');
   });
 });
