@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <div id="app">
     <div class="uk-section-primary">
       <navbar/>
     </div>
 
     <div class="uk-margin">
-      <router-view keep-alive></router-view>
+      <router-view></router-view>
     </div>
 
     <foot/>
@@ -25,6 +25,6 @@
   }
 </script>
 
-<style>
-  @import "app.less";
+<style lang="scss">
+  @import "app.scss";
 </style>

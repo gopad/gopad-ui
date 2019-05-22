@@ -11,6 +11,10 @@ custom:
     base: "../../dist/static/"
     prefix: ""
   - files:
+    - "../../dist/static/favicon.ico"
+    base: "../../dist/static/"
+    prefix: ""
+  - files:
     - "../../dist/static/assets/"
     base: "../../dist/static/assets/"
     prefix: ""

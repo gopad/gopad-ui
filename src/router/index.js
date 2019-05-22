@@ -1,20 +1,31 @@
 import Vue from 'vue'
-import VueRouter from 'vue-router'
+import Router from 'vue-router'
 
 import DashboardIndex from '../views/dashboard/index.vue'
 import ProfileIndex from '../views/profile/index.vue'
 import NotfoundIndex from '../views/notfound/index.vue'
 
-Vue.use(VueRouter)
+Vue.use(Router)
 
-export default new VueRouter({
+export default new Router({
   mode: 'history',
-  base: __dirname,
-  scrollBehavior: () => ({ y: 0 }),
+  base: process.env.BASE_URL,
   linkActiveClass: 'uk-active',
   routes: [
-     { path: '/', component: DashboardIndex },
-     { path: '/profile', component: ProfileIndex },
-     { path: '/*', component: NotfoundIndex }
+    {
+      path: '/',
+      name: 'home',
+      component: DashboardIndex
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: ProfileIndex
+    },
+    {
+      path: '/*',
+      name: 'catchall',
+      component: NotfoundIndex
+    }
   ]
 })

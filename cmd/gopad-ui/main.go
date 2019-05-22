@@ -18,7 +18,7 @@ func main() {
 
 	app := &cli.App{
 		Name:     "gopad-ui",
-		Version:  version.Version.String(),
+		Version:  version.String,
 		Usage:    "etherpad for markdown with go",
 		Authors:  authorList(),
 		Flags:    globalFlags(cfg),

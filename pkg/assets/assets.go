@@ -9,7 +9,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-//go:generate fileb0x ab0x.yaml
+//go:generate gorunpkg github.com/UnnoTed/fileb0x ab0x.yaml
 
 // Load initializes the static files.
 func Load(cfg *config.Config) http.FileSystem {

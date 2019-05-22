@@ -1,7 +1,6 @@
 # Gopad: Web UI
 
 [![Build Status](http://drone.gopad.tech/api/badges/gopad/gopad-ui/status.svg)](http://drone.gopad.tech/gopad/gopad-ui)
-[![Build Status](https://ci.appveyor.com/api/projects/status/v22fb4i62ofwajg2?svg=true)](https://ci.appveyor.com/project/gopadz/gopad-ui)
 [![Stories in Ready](https://badge.waffle.io/gopad/gopad-api.svg?label=ready&title=Ready)](http://waffle.io/gopad/gopad-api)
 [![Join the Matrix chat at https://matrix.to/#/#gopad:matrix.org](https://img.shields.io/badge/matrix-%23gopad-7bc9a4.svg)](https://matrix.to/#/#gopad:matrix.org)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/2e41fc2d144c45c18832412c714dcea1)](https://www.codacy.com/app/gopad/gopad-ui?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=gopad/gopad-ui&amp;utm_campaign=Badge_Grade)
@@ -18,6 +17,8 @@ Within this repository we are building the web interface for our [Gopad API](htt
 
 You can download prebuilt binaries from the GitHub releases or from our [download site](http://dl.gopad.tech/ui). You are a Mac user? Just take a look at our [homebrew formula](https://github.com/gopad/homebrew-gopad).
 
+If you want to serve the UI by a regular webserver you can also find a tarball on our downloads server to just get the assets.
+
 
 ## Build
 
@@ -28,23 +29,13 @@ yarn install
 yarn build
 ```
 
-If you also want to publish it as a single binary with our server based on Go make sure you have a working Go environment, for further reference or a guide take a look at the [install instructions](http://golang.org/doc/install.html). This project requires Go >= v1.8.
+If you also want to publish it as a single binary with our server written in Go make sure you have a working Go environment, for further reference or a guide take a look at the [install instructions](http://golang.org/doc/install.html). This project requires Go >= v1.11.
 
 ```bash
-go get -d github.com/gopad/gopad-ui
-cd $GOPATH/src/github.com/gopad/gopad-ui
+git clone https://github.com/gopad/gopad-ui.git
+cd gopad-ui
 
-# install retool
-make retool
-
-# sync dependencies
-make sync
-
-# generate code
-make generate
-
-# build binary
-make build
+make generate build
 
 ./bin/gopad-ui -h
 ```
@@ -56,15 +47,15 @@ With the `make generate` command we are embedding all the static assets into the
 
 To start developing on this UI you have to execute only a few commands. To setup a NodeJS environment or even a Go environment is out of the scope of this document. To start development just execute those commands:
 
-```
+```bash
 yarn install
 yarn watch
 
-make retool sync generate build
+make generate build
 ./bin/gopad-ui --log-level debug server --static dist/static/
 ```
 
-The development server reloads the used assets on every request. To properly work with it you need to start the [API server](https://github.com/gopad/gopad-api) separately since this project doesn't include it. After launching this command on a terminal you can access the web interface at [http://localhost:9000](http://localhost:9000).
+The development server reloads the used assets on every request. To properly work with it you need to start the [API server](https://github.com/gopad/gopad-api) separately since this project doesn't include it. After launching this command on a terminal you can access the web interface at [http://localhost:8080](http://localhost:8080).
 
 
 ## Security
