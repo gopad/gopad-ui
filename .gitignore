@@ -3,3 +3,6 @@
 /node_modules
 
 /pkg/assets/ab0x.go
+
+/tests/e2e/videos
+/tests/e2e/screenshots
