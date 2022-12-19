@@ -74,7 +74,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           images: |
             gopad/gopad-ui
-            quay.io/gopad/gopad-ui
+          # quay.io/gopad/gopad-ui
           labels: |
             org.opencontainers.image.vendor=Gopad
             maintainer=Thomas Boerger <thomas@webhippie.de>
@@ -156,28 +156,28 @@ jobs:
           target: ${{ steps.hubTags.outputs.tags }}
           ignore_missing: true
 
-      - name: Quay tags
-        id: quayTags
-        uses: docker/metadata-action@v4
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          images: quay.io/gopad/gopad-ui
-          tags: |
-            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/master' }}
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
+      # - name: Quay tags
+      #   id: quayTags
+      #   uses: docker/metadata-action@v4
+      #   with:
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #     images: quay.io/gopad/gopad-ui
+      #     tags: |
+      #       type=raw,value=latest,enable=${{ github.ref == 'refs/heads/master' }}
+      #       type=semver,pattern={{version}}
+      #       type=semver,pattern={{major}}.{{minor}}
+      #       type=semver,pattern={{major}}
 
-      - name: Quay manifest
-        id: quay
-        uses: actionhippie/manifest@v1
-        with:
-          username: ${{ secrets.QUAY_USERNAME }}
-          password: ${{ secrets.QUAY_PASSWORD }}
-          platforms: linux/amd64,linux/386,linux/arm64,linux/arm/v6
-          template: quay.io/gopad/gopad-ui:VERSION-OS-ARCH
-          target: ${{ steps.quayTags.outputs.tags }}
-          ignore_missing: true
+      # - name: Quay manifest
+      #   id: quay
+      #   uses: actionhippie/manifest@v1
+      #   with:
+      #     username: ${{ secrets.QUAY_USERNAME }}
+      #     password: ${{ secrets.QUAY_PASSWORD }}
+      #     platforms: linux/amd64,linux/386,linux/arm64,linux/arm/v6
+      #     template: quay.io/gopad/gopad-ui:VERSION-OS-ARCH
+      #     target: ${{ steps.quayTags.outputs.tags }}
+      #     ignore_missing: true
 
   readme:
     runs-on: ubuntu-latest
@@ -199,13 +199,13 @@ jobs:
           description: "Gopad: Web UI"
           readme: README.md
 
-      - name: Quay readme
-        id: quay
-        uses: actionhippie/pushrm@v1
-        with:
-          provider: quay
-          target: quay.io/gopad/gopad-ui
-          apikey: ${{ secrets.QUAY_APIKEY }}
-          readme: README.md
+      # - name: Quay readme
+      #   id: quay
+      #   uses: actionhippie/pushrm@v1
+      #   with:
+      #     provider: quay
+      #     target: quay.io/gopad/gopad-ui
+      #     apikey: ${{ secrets.QUAY_APIKEY }}
+      #     readme: README.md
 
 ...
