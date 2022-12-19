@@ -6,7 +6,6 @@ import (
 	"github.com/gopad/gopad-ui/pkg/config"
 	"github.com/gopad/gopad-ui/pkg/templates"
 	"github.com/rs/zerolog/log"
-	"github.com/webhippie/fail"
 )
 
 // Index renders the general template on all routes.
@@ -16,13 +15,22 @@ func Index(cfg *config.Config) http.HandlerFunc {
 		Logger()
 
 	return func(w http.ResponseWriter, r *http.Request) {
-		if err := templates.Load(cfg).ExecuteTemplate(w, "index.html", vars(cfg)); err != nil {
+		if err := templates.Load(
+			cfg,
+		).ExecuteTemplate(
+			w,
+			"index.html",
+			vars(cfg),
+		); err != nil {
 			logger.Warn().
 				Err(err).
-				Msg("failed to process index template")
+				Msg("Failed to process template")
 
-			fail.ErrorPlain(w, fail.Cause(err).Unexpected())
-			return
+			http.Error(
+				w,
+				"Failed to process template",
+				http.StatusInternalServerError,
+			)
 		}
 	}
 }

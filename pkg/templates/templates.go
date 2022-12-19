@@ -2,12 +2,11 @@ package templates
 
 import (
 	"html/template"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
 
-	"github.com/Masterminds/sprig"
+	"github.com/Masterminds/sprig/v3"
 	"github.com/gopad/gopad-ui/pkg/assets"
 	"github.com/gopad/gopad-ui/pkg/config"
 	"github.com/rs/zerolog/log"
@@ -29,7 +28,7 @@ func Load(cfg *config.Config) *template.Template {
 	if err != nil {
 		log.Warn().
 			Err(err).
-			Msg("failed to get builtin template list")
+			Msg("Failed to get builtin template list")
 	} else {
 		for _, name := range files {
 			if !strings.HasSuffix(name, ".html") {
@@ -42,14 +41,14 @@ func Load(cfg *config.Config) *template.Template {
 				log.Warn().
 					Err(err).
 					Str("file", name).
-					Msg("failed to read builtin template")
+					Msg("Failed to read builtin template")
 			}
 
 			if _, err := tpls.New(name).Parse(string(file)); err != nil {
 				log.Warn().
 					Err(err).
 					Str("file", name).
-					Msg("failed to parse builtin template")
+					Msg("Failed to parse builtin template")
 			}
 		}
 	}
@@ -76,13 +75,13 @@ func Load(cfg *config.Config) *template.Template {
 			})
 
 			for _, name := range files {
-				file, err := ioutil.ReadFile(name)
+				file, err := os.ReadFile(name)
 
 				if err != nil {
 					log.Warn().
 						Err(err).
 						Str("file", name).
-						Msg("failed to read custom template")
+						Msg("Failed to read custom template")
 				}
 
 				tplName := strings.TrimPrefix(
@@ -97,12 +96,12 @@ func Load(cfg *config.Config) *template.Template {
 					log.Warn().
 						Err(err).
 						Str("file", name).
-						Msg("failed to parse custom template")
+						Msg("Failed to parse custom template")
 				}
 			}
 		} else {
 			log.Warn().
-				Msg("custom assets directory doesn't exist")
+				Msg("Custom assets directory doesn't exist")
 		}
 	}
 

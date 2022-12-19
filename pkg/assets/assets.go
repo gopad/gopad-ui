@@ -1,6 +1,7 @@
 package assets
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 	"path"
@@ -8,8 +9,6 @@ import (
 	"github.com/gopad/gopad-ui/pkg/config"
 	"github.com/rs/zerolog/log"
 )
-
-//go:generate gorunpkg github.com/UnnoTed/fileb0x ab0x.yaml
 
 // Load initializes the static files.
 func Load(cfg *config.Config) http.FileSystem {
@@ -44,15 +43,26 @@ func (c ChainedFS) Open(origPath string) (http.File, error) {
 			}
 		} else {
 			log.Warn().
-				Msg("custom assets directory doesn't exist")
+				Msg("Custom assets directory doesn't exist")
 		}
 	}
 
-	f, err := FS.OpenFile(CTX, origPath, os.O_RDONLY, 0644)
+	f, err := FS.OpenFile(
+		CTX,
+		origPath,
+		os.O_RDONLY,
+		0644,
+	)
 
 	if err != nil {
 		return nil, err
 	}
 
 	return f, nil
+}
+
+// Templates provides a list of bundled templates.
+func (c ChainedFS) Templates() ([]string, error) {
+
+	return nil, fmt.Errorf("failed")
 }

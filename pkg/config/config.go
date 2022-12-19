@@ -1,38 +1,41 @@
 package config
 
-// Server defines the webserver configuration.
-type Server struct {
-	Host   string
-	Root   string
-	Addr   string
-	Static string
-	Pprof  bool
+// Logs defines the level and color for log configuration.
+type Logs struct {
+	Level  string `mapstructure:"level"`
+	Pretty bool   `mapstructure:"pretty"`
+	Color  bool   `mapstructure:"color"`
 }
 
-// API defines the api server configuration.
-type API struct {
-	Endpoint string
+// Server defines the webserver configuration.
+type Server struct {
+	Host   string `mapstructure:"host"`
+	Root   string `mapstructure:"root"`
+	Addr   string `mapstructure:"addr"`
+	Cert   string `mapstructure:"cert"`
+	Key    string `mapstructure:"key"`
+	Static string `mapstructure:"static"`
 }
 
 // Metrics defines the metrics server configuration.
 type Metrics struct {
-	Addr  string
-	Token string
+	Addr  string `mapstructure:"addr"`
+	Token string `mapstructure:"token"`
+	Pprof bool   `mapstructure:"pprof"`
 }
 
-// Logs defines the level and color for log configuration.
-type Logs struct {
-	Level  string
-	Pretty bool
-	Color  bool
+// API defines the api server configuration.
+type API struct {
+	Endpoint string `mapstructure:"endpoint"`
 }
 
 // Config is a combination of all available configurations.
 type Config struct {
-	Server  Server
-	API     API
-	Metrics Metrics
-	Logs    Logs
+	File    string  `mapstructure:"-"`
+	Logs    Logs    `mapstructure:"logs"`
+	Server  Server  `mapstructure:"server"`
+	Metrics Metrics `mapstructure:"metrics"`
+	API     API     `mapstructure:"api"`
 }
 
 // Load initializes a default configuration struct.

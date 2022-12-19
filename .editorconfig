@@ -15,15 +15,11 @@ indent_size = 4
 indent_style = tab
 indent_size = 4
 
-[*.{html,tmpl}]
-indent_style = tab
-indent_size = 4
-
-[*.{js,vue}]
+[*.{ts,js,vue}]
 indent_style = space
 indent_size = 2
 
-[*.{css,less}]
+[*.{css,less,scss}]
 indent_style = space
 indent_size = 2
 
