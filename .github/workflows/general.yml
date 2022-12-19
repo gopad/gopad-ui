@@ -33,9 +33,9 @@ jobs:
         id: lint
         run: npm run lint
 
-      - name: Run unittest
-        id: unit
-        run: npm run test
+      # - name: Run unittest
+      #   id: unit
+      #   run: npm run test
 
       - name: Run build
         id: build
