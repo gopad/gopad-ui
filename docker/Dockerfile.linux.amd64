@@ -7,5 +7,5 @@ CMD ["server"]
 
 ENV GOPAD_UI_ASSETS /usr/share/gopad
 
-COPY dist/static /usr/share/gopad
-COPY dist/binaries/gopad-ui /usr/bin/gopad-ui
+COPY static /usr/share/gopad
+COPY bin/gopad-ui /usr/bin/gopad-ui
