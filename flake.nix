@@ -23,6 +23,7 @@
             go_1_19
             nodejs-18_x
             nodePackages.npm
+            nodePackages.npm-check-updates
           ];
         };
       }
