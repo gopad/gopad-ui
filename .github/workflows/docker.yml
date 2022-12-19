@@ -47,17 +47,25 @@ jobs:
         with:
           go-version: ^1.19.0
 
-      - name: Run build
+      - name: Build frontend
+        id: frontend
+        run: |
+          npm install --ci
+          npm run build
+
+      - name: Generate backend
+        id: generate
+        run: |
+          make generate
+
+      - name: Build backend
         id: build
         env:
           GOOS: ${{ matrix.goos }}
           GOARCH: ${{ matrix.goarch }}
           GOARM: ${{ matrix.goarm }}
         run: |
-          npm install --ci
-          npm run build
-
-          make generate build
+          make build
 
       - name: Docker meta
         id: meta
