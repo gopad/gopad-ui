@@ -6,5 +6,4 @@ import HelloWorld from "./components/HelloWorld.vue";
   <HelloWorld msg="Gopad" />
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

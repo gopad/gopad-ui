@@ -1,1 +1,10 @@
 .direnv/
+.bingo/
+.github/
+
+cmd/
+pkg/
+
+.codacy.yml
+CHANGELOG.md
+README.md

@@ -10,19 +10,19 @@ compression:
 
 custom:
   - files:
-    - "static/index.html"
+      - "static/index.html"
     base: "static/"
     prefix: ""
   - files:
-    - "static/favicon.ico"
+      - "static/favicon.ico"
     base: "static/"
     prefix: ""
   - files:
-    - "static/manifest.json"
+      - "static/manifest.json"
     base: "static/"
     prefix: ""
   - files:
-    - "static/assets/"
+      - "static/assets/"
     base: "static/assets/"
     prefix: ""
 

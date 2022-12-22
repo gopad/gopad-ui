@@ -4,7 +4,7 @@ import { ref } from "vue";
 defineProps({
   msg: {
     type: String,
-    default: '',
+    default: "",
   },
 });
 
@@ -19,5 +19,4 @@ const count = ref(0);
   </div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>
