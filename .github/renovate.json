@@ -37,6 +37,9 @@
           "automerge": true
       }
   ],
+  "ignoreDeps": [
+    "docker/build-push-action"
+  ],
   "labels": [
       "renovate"
   ]
