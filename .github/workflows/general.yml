@@ -94,13 +94,13 @@ jobs:
         id: build
         run: make build
 
-      # - name: Coverage report
-      #   id: codacy
-      #   if: github.ref == 'refs/heads/master'
-      #   uses: codacy/codacy-coverage-reporter-action@v1
-      #   with:
-      #     project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-      #     coverage-reports: coverage.out
-      #     force-coverage-parser: go
+      - name: Coverage report
+        id: codacy
+        if: github.ref == 'refs/heads/master'
+        uses: codacy/codacy-coverage-reporter-action@v1
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          coverage-reports: coverage.out
+          force-coverage-parser: go
 
 ...
