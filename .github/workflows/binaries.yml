@@ -44,7 +44,7 @@ jobs:
           npm install --ci
           npm run build
 
-          make generate release
+          make assets release
 
       - name: Sign release
         id: gpgsign

@@ -70,9 +70,9 @@ jobs:
           name: frontend
           path: static/
 
-      - name: Run generate
-        id: generate
-        run: make generate
+      - name: Run assets
+        id: assets
+        run: make assets
 
       - name: Run vet
         id: vet
