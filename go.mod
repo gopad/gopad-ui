@@ -12,7 +12,7 @@ require (
 	github.com/rs/zerolog v1.29.1
 	github.com/spf13/viper v1.15.0
 	github.com/stretchr/testify v1.8.2
-	github.com/urfave/cli/v2 v2.25.1
+	github.com/urfave/cli/v2 v2.25.2
 	golang.org/x/net v0.9.0
 )
 
