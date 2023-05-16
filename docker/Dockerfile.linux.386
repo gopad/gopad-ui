@@ -1,4 +1,4 @@
-FROM i386/alpine:3.17
+FROM i386/alpine:3.18
 RUN apk add --no-cache ca-certificates mailcap
 
 EXPOSE 8000 8080
