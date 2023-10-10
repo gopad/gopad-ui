@@ -13,7 +13,7 @@ require (
 	github.com/spf13/viper v1.17.0
 	github.com/stretchr/testify v1.8.4
 	github.com/urfave/cli/v2 v2.25.7
-	golang.org/x/net v0.16.0
+	golang.org/x/net v0.17.0
 )
 
 require (
