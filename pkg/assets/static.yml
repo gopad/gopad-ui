@@ -18,7 +18,7 @@ custom:
     base: "static/"
     prefix: ""
   - files:
-      - "static/manifest.json"
+      - "static/.vite/manifest.json"
     base: "static/"
     prefix: ""
   - files:
