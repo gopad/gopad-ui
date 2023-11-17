@@ -15,7 +15,7 @@ func Manifest(cfg *config.Config) http.HandlerFunc {
 		Logger()
 
 	return func(w http.ResponseWriter, r *http.Request) {
-		file, err := assets.Load(cfg).Open("manifest.json")
+		file, err := assets.Load(cfg).Open(".vite/manifest.json")
 
 		if err != nil {
 			logger.Warn().

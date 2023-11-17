@@ -50,6 +50,7 @@ func Server(
 	mux.Route(cfg.Server.Root, func(root chi.Router) {
 		mux.Get("/favicon.ico", handler.Favicon(cfg))
 		mux.Get("/manifest.json", handler.Manifest(cfg))
+		mux.Get("/.vite/manifest.json", handler.Manifest(cfg))
 
 		root.Handle("/assets/*", handler.Static(
 			cfg,
