@@ -14,7 +14,7 @@ func Index(cfg *config.Config) http.HandlerFunc {
 		Str("handler", "index").
 		Logger()
 
-	return func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, _ *http.Request) {
 		if err := templates.Load(
 			cfg,
 		).ExecuteTemplate(

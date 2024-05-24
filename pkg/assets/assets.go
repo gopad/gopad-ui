@@ -24,10 +24,10 @@ type ChainedFS struct {
 
 // Open just implements the HTTP filesystem interface.
 func (c ChainedFS) Open(origPath string) (http.File, error) {
-	if c.config.Server.Static != "" {
-		if stat, err := os.Stat(c.config.Server.Static); err == nil && stat.IsDir() {
+	if c.config.Server.Assets != "" {
+		if stat, err := os.Stat(c.config.Server.Assets); err == nil && stat.IsDir() {
 			customPath := path.Join(
-				c.config.Server.Static,
+				c.config.Server.Assets,
 				"assets",
 				origPath,
 			)

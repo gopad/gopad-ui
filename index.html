@@ -1,30 +1,29 @@
-<!DOCTYPE html>
+<!doctype html>
 
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta content="width=device-width, initial-scale=1.0" name="viewport" />
-		<meta content="IE=edge" http-equiv="X-UA-Compatible" />
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="IE=edge" http-equiv="X-UA-Compatible" />
 
-		<meta content="Etherpad for markdown with Go" name="description" />
-		<meta content="Gopad Team" name="author" />
+    <meta content="Etherpad for markdown with Go" name="description" />
+    <meta content="Gopad Team" name="author" />
 
-		<title>Gopad</title>
-		<link href="/favicon.ico" rel="icon" type="image/x-icon" />
-	</head>
-	<body>
-		<noscript>
-			<strong>
-				We're sorry but this app doesn't work properly without
-				JavaScript enabled. Please enable it to continue.
-			</strong>
-		</noscript>
+    <title>Gopad</title>
+    <link href="favicon.ico" rel="icon" type="image/x-icon" />
+    <base href="/" />
+  </head>
 
-		<div id="app"></div>
+  <body>
+    <noscript>
+      <strong>
+        We're sorry but this app doesn't work properly without Javascript
+        enabled. Please enable it to continue.
+      </strong>
+    </noscript>
 
-		<!-- <script>
-			window.INITIAL_STATE = { api: "{{ .Endpoint }}" };
-		</script> -->
-		<script type="module" src="/src/main.js"></script>
-	</body>
+    <div id="app"></div>
+
+    <script type="module" src="src/main.ts"></script>
+  </body>
 </html>

@@ -1,9 +1,19 @@
-<script setup>
-import HelloWorld from "./components/HelloWorld.vue";
-</script>
-
 <template>
-  <HelloWorld msg="Gopad" />
+  <layout-header />
+  <router-view />
+  <layout-footer />
 </template>
 
-<style scoped></style>
+<script setup lang="ts">
+import { LayoutHeader, LayoutFooter } from "./components";
+</script>
+
+<style>
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  cursor: default;
+}
+</style>

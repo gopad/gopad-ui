@@ -1,0 +1,63 @@
+{
+  "breadcrumb": {
+    "home": "Home",
+    "users": "Benutzer",
+    "teams": "Gruppen",
+    "create": "Anlegen",
+    "update": "Aktualisieren"
+  },
+  "mainnav": {
+    "home": "Home",
+    "users": "Benutzer",
+    "teams": "Gruppen"
+  },
+  "actions": {
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "create": "Anlegen",
+    "show": "Details",
+    "update": "Aktualisieren",
+    "confirm": "Bestätigen",
+    "confirm_delete": "Bist du sicher das du {0} löschen möchtest?"
+  },
+  "common": {
+    "actions": "Aktionen",
+    "id": "ID",
+    "slug": "Slug"
+  },
+  "welcome": {
+    "title": "Willkommen auf Gopad",
+    "slogan": "Etherpad für Markdown mit Go"
+  },
+  "teams": {
+    "title": {
+      "index": "Gruppen",
+      "show": "Gruppe",
+      "create": "Team anlegen",
+      "update": "{0}"
+    },
+    "name": "Name",
+    "no_entries": "Keine Gruppen gefunden",
+    "create": {
+      "question": "Vielleicht möchtest du eine {0}?",
+      "link": "Gruppe anlegen"
+    }
+  },
+  "users": {
+    "title": {
+      "index": "Benutzer",
+      "show": "Benutzer",
+      "create": "Benutzer anlegen",
+      "update": "{0}"
+    },
+    "username": "Benutzer",
+    "email": "Email",
+    "admin": "Admin",
+    "active": "Aktiv",
+    "no_entries": "Keine Benutzer gefunden",
+    "create": {
+      "question": "Vielleicht möchtest du einen {0}?",
+      "link": "Benutzer anlegen"
+    }
+  }
+}

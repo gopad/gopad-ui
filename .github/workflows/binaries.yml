@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: Checkout source
         id: source
-        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4
+        uses: actions/checkout@v4
 
       - name: Configure aws
         id: aws
@@ -29,22 +29,24 @@ jobs:
         id: nodejs
         uses: actions/setup-node@v4
         with:
-          node-version: 18
-          cache: npm
+          node-version: 20.x
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
 
       - name: Setup golang
         id: golang
         uses: actions/setup-go@v5
         with:
-          go-version: ^1.19.0
+          go-version: ^1.21.0
 
-      - name: Run release
-        id: release
-        run: |
-          npm install --ci
-          npm run build
+      - name: WebUI deps
+        run: npm install --ci
 
-          make assets release
+      - name: WebUI build
+        run: npm run build
+
+      - name: Build release
+        run: make assets release
 
       - name: Sign release
         id: gpgsign

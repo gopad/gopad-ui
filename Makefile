@@ -16,7 +16,7 @@ endif
 
 GOBUILD ?= CGO_ENABLED=0 go build
 PACKAGES ?= $(shell go list ./...)
-SOURCES ?= $(shell find . -name "*.go" -type f -not -iname mock.go)
+SOURCES ?= $(shell find . -name "*.go" -type f -not -iname mock.go -not -path ./.devenv/\*)
 
 TAGS ?= netgo
 
@@ -50,10 +50,6 @@ GCFLAGS += all=-N -l
 .PHONY: all
 all: build
 
-.PHONY: sync
-sync:
-	go mod download
-
 .PHONY: clean
 clean:
 	go clean -i ./...
@@ -66,6 +62,10 @@ fmt:
 .PHONY: vet
 vet:
 	go vet $(PACKAGES)
+
+.PHONY: golangci
+golangci: $(GOLANGCI_LINT)
+	$(GOLANGCI_LINT) run ./...
 
 .PHONY: staticcheck
 staticcheck: $(STATICCHECK)

@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/Masterminds/sprig/v3"
+	"github.com/drone/funcmap"
 	"github.com/gopad/gopad-ui/pkg/assets"
 	"github.com/gopad/gopad-ui/pkg/config"
 	"github.com/rs/zerolog/log"
@@ -28,7 +28,7 @@ func Load(cfg *config.Config) *template.Template {
 	if err != nil {
 		log.Warn().
 			Err(err).
-			Msg("Failed to get builtin template list")
+			Msg("failed to get builtin template list")
 	} else {
 		for _, name := range files {
 			if !strings.HasSuffix(name, ".html") {
@@ -41,23 +41,27 @@ func Load(cfg *config.Config) *template.Template {
 				log.Warn().
 					Err(err).
 					Str("file", name).
-					Msg("Failed to read builtin template")
+					Msg("failed to read builtin template")
 			}
 
 			if _, err := tpls.New(name).Parse(string(file)); err != nil {
 				log.Warn().
 					Err(err).
 					Str("file", name).
-					Msg("Failed to parse builtin template")
+					Msg("failed to parse builtin template")
 			}
 		}
 	}
 
-	if cfg.Server.Static != "" {
-		if stat, err := os.Stat(cfg.Server.Static); err == nil && stat.IsDir() {
+	if cfg.Server.Assets != "" {
+		if stat, err := os.Stat(cfg.Server.Assets); err == nil && stat.IsDir() {
 			files := []string{}
 
-			filepath.Walk(cfg.Server.Static, func(path string, f os.FileInfo, err error) error {
+			_ = filepath.Walk(cfg.Server.Assets, func(path string, f os.FileInfo, err error) error {
+				if err != nil {
+					return err
+				}
+
 				if f.IsDir() {
 					return nil
 				}
@@ -81,13 +85,13 @@ func Load(cfg *config.Config) *template.Template {
 					log.Warn().
 						Err(err).
 						Str("file", name).
-						Msg("Failed to read custom template")
+						Msg("failed to read custom template")
 				}
 
 				tplName := strings.TrimPrefix(
 					strings.TrimPrefix(
 						name,
-						cfg.Server.Static,
+						cfg.Server.Assets,
 					),
 					"/",
 				)
@@ -96,12 +100,12 @@ func Load(cfg *config.Config) *template.Template {
 					log.Warn().
 						Err(err).
 						Str("file", name).
-						Msg("Failed to parse custom template")
+						Msg("failed to parse custom template")
 				}
 			}
 		} else {
 			log.Warn().
-				Msg("Custom assets directory doesn't exist")
+				Msg("custom assets directory doesn't exist")
 		}
 	}
 
@@ -110,5 +114,5 @@ func Load(cfg *config.Config) *template.Template {
 
 // Funcs provides some general usefule template helpers.
 func Funcs() template.FuncMap {
-	return sprig.FuncMap()
+	return funcmap.Funcs
 }

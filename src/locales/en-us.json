@@ -1,0 +1,63 @@
+{
+  "breadcrumb": {
+    "home": "Home",
+    "users": "Users",
+    "teams": "Teams",
+    "create": "Create",
+    "update": "Update"
+  },
+  "mainnav": {
+    "home": "Home",
+    "users": "Users",
+    "teams": "Teams"
+  },
+  "actions": {
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "create": "Create",
+    "show": "Show",
+    "update": "Update",
+    "confirm": "Confirm",
+    "confirm_delete": "Are you sure you want to delete {0}?"
+  },
+  "common": {
+    "actions": "Actions",
+    "id": "ID",
+    "slug": "Slug"
+  },
+  "welcome": {
+    "title": "Welcome to Gopad",
+    "slogan": "Etherpad for markdown with go"
+  },
+  "teams": {
+    "title": {
+      "index": "Teams",
+      "show": "Team",
+      "create": "Create team",
+      "update": "{0}"
+    },
+    "name": "Name",
+    "no_entries": "No teams found",
+    "create": {
+      "question": "Maybe you want to {0}?",
+      "link": "create a team"
+    }
+  },
+  "users": {
+    "title": {
+      "index": "Users",
+      "show": "User",
+      "create": "Create user",
+      "update": "{0}"
+    },
+    "username": "Username",
+    "email": "Email",
+    "admin": "Admin",
+    "active": "Active",
+    "no_entries": "No users found",
+    "create": {
+      "question": "Maybe you want to {0}?",
+      "link": "create a user"
+    }
+  }
+}

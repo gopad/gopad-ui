@@ -1,4 +1,7 @@
 .direnv/
+.devenv/
+flake.lock
+
 .bingo/
 .github/
 
@@ -8,3 +11,4 @@ pkg/
 .codacy.yml
 CHANGELOG.md
 README.md
+CONTRIBUTING.md

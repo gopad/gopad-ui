@@ -12,204 +12,183 @@ import (
 	"github.com/gopad/gopad-ui/pkg/router"
 	"github.com/oklog/run"
 	"github.com/rs/zerolog/log"
-	"github.com/urfave/cli/v2"
-	"golang.org/x/net/http2"
-	"golang.org/x/net/http2/h2c"
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
-// Server provides the sub-command to start the server.
-func Server(cfg *config.Config) *cli.Command {
-	return &cli.Command{
-		Name:   "server",
-		Usage:  "Start integrated server",
-		Flags:  ServerFlags(cfg),
-		Action: ServerAction(cfg),
+var (
+	serverCmd = &cobra.Command{
+		Use:   "server",
+		Short: "Start integrated server",
+		Run:   serverAction,
+		Args:  cobra.NoArgs,
 	}
+
+	defaultMetricsAddr  = "0.0.0.0:8081"
+	defaultMetricsToken = ""
+	defaultServerAddr   = "0.0.0.0:8080"
+	defaultMetricsPprof = false
+	defaultServerHost   = "http://localhost:8080"
+	defaultServerRoot   = "/"
+	defaultServerAssets = ""
+	defaultServerCert   = ""
+	defaultServerKey    = ""
+	defaultAPIEndpoint  = "http://localhost:8000"
+)
+
+func init() {
+	rootCmd.AddCommand(serverCmd)
+
+	serverCmd.PersistentFlags().String("metrics-addr", defaultMetricsAddr, "Address to bind the metrics")
+	viper.SetDefault("metrics.addr", defaultMetricsAddr)
+	_ = viper.BindPFlag("metrics.addr", serverCmd.PersistentFlags().Lookup("metrics-addr"))
+
+	serverCmd.PersistentFlags().String("metrics-token", defaultMetricsToken, "Token to make metrics secure")
+	viper.SetDefault("metrics.token", defaultMetricsToken)
+	_ = viper.BindPFlag("metrics.token", serverCmd.PersistentFlags().Lookup("metrics-token"))
+
+	serverCmd.PersistentFlags().Bool("metrics-pprof", defaultMetricsPprof, "Enable pprof debugging")
+	viper.SetDefault("metrics.pprof", defaultMetricsPprof)
+	_ = viper.BindPFlag("metrics.pprof", serverCmd.PersistentFlags().Lookup("metrics-pprof"))
+
+	serverCmd.PersistentFlags().String("server-addr", defaultServerAddr, "Address to bind the server")
+	viper.SetDefault("server.addr", defaultServerAddr)
+	_ = viper.BindPFlag("server.addr", serverCmd.PersistentFlags().Lookup("server-addr"))
+
+	serverCmd.PersistentFlags().String("server-host", defaultServerHost, "External access to console")
+	viper.SetDefault("server.host", defaultServerHost)
+	_ = viper.BindPFlag("server.host", serverCmd.PersistentFlags().Lookup("server-host"))
+
+	serverCmd.PersistentFlags().String("server-root", defaultServerRoot, "Path to access the console")
+	viper.SetDefault("server.root", defaultServerRoot)
+	_ = viper.BindPFlag("server.root", serverCmd.PersistentFlags().Lookup("server-root"))
+
+	serverCmd.PersistentFlags().String("server-assets", defaultServerAssets, "Path to static assets")
+	viper.SetDefault("server.assets", defaultServerAssets)
+	_ = viper.BindPFlag("server.assets", serverCmd.PersistentFlags().Lookup("server-assets"))
+
+	serverCmd.PersistentFlags().String("server-cert", defaultServerCert, "Path to SSL cert")
+	viper.SetDefault("server.cert", defaultServerCert)
+	_ = viper.BindPFlag("server.cert", serverCmd.PersistentFlags().Lookup("server-cert"))
+
+	serverCmd.PersistentFlags().String("server-key", defaultServerKey, "Path to SSL key")
+	viper.SetDefault("server.key", defaultServerKey)
+	_ = viper.BindPFlag("server.key", serverCmd.PersistentFlags().Lookup("server-key"))
+
+	serverCmd.PersistentFlags().String("api-endpoint", defaultAPIEndpoint, "URL for the api server")
+	viper.SetDefault("api.endpoint", defaultAPIEndpoint)
+	_ = viper.BindPFlag("api.endpoint", serverCmd.PersistentFlags().Lookup("api-endpoint"))
 }
 
-// ServerFlags defines server flags.
-func ServerFlags(cfg *config.Config) []cli.Flag {
-	return []cli.Flag{
-		&cli.BoolFlag{
-			Name:        "debug-pprof",
-			Value:       false,
-			Usage:       "Enable pprof debugging",
-			EnvVars:     []string{"GOPAD_UI_DEBUG_PPROF"},
-			Destination: &cfg.Metrics.Pprof,
-		},
-		&cli.StringFlag{
-			Name:        "metrics-addr",
-			Value:       defaultMetricsAddr,
-			Usage:       "Address to bind the metrics",
-			EnvVars:     []string{"GOPAD_UI_METRICS_ADDR"},
-			Destination: &cfg.Metrics.Addr,
-		},
-		&cli.StringFlag{
-			Name:        "metrics-token",
-			Value:       "",
-			Usage:       "Token to make metrics secure",
-			EnvVars:     []string{"GOPAD_UI_METRICS_TOKEN"},
-			Destination: &cfg.Metrics.Token,
-			FilePath:    "/etc/gopad/secrets/metrics-token",
-		},
-		&cli.StringFlag{
-			Name:        "server-addr",
-			Value:       defaultServerAddress,
-			Usage:       "Address to bind the UI",
-			EnvVars:     []string{"GOPAD_UI_SERVER_ADDR"},
-			Destination: &cfg.Server.Addr,
-		},
-		&cli.StringFlag{
-			Name:        "server-host",
-			Value:       "http://localhost:8080",
-			Usage:       "External access to UI",
-			EnvVars:     []string{"GOPAD_UI_SERVER_HOST"},
-			Destination: &cfg.Server.Host,
-		},
-		&cli.StringFlag{
-			Name:        "server-root",
-			Value:       "/",
-			Usage:       "Path to access the UI",
-			EnvVars:     []string{"GOPAD_UI_SERVER_ROOT"},
-			Destination: &cfg.Server.Root,
-		},
-		&cli.StringFlag{
-			Name:        "server-cert",
-			Value:       "",
-			Usage:       "Path to SSL cert",
-			EnvVars:     []string{"GOPAD_UI_SERVER_CERT"},
-			Destination: &cfg.Server.Cert,
-		},
-		&cli.StringFlag{
-			Name:        "server-key",
-			Value:       "",
-			Usage:       "Path to SSL key",
-			EnvVars:     []string{"GOPAD_UI_SERVER_KEY"},
-			Destination: &cfg.Server.Key,
-		},
-		&cli.StringFlag{
-			Name:        "static-path",
-			Value:       "",
-			Usage:       "Folder for serving assets",
-			EnvVars:     []string{"GOPAD_UI_STATIC_PATH"},
-			Destination: &cfg.Server.Static,
-		},
-		&cli.StringFlag{
-			Name:        "api-endpoint",
-			Value:       "http://localhost:8000",
-			Usage:       "URL for the api server",
-			EnvVars:     []string{"GOPAD_UI_API_ENDPOINT"},
-			Destination: &cfg.API.Endpoint,
-		},
+func serverAction(_ *cobra.Command, _ []string) {
+	token, err := config.Value(cfg.Metrics.Token)
+
+	if err != nil {
+		log.Fatal().
+			Err(err).
+			Msg("Failed to parse metrics token secret")
+
+		os.Exit(1)
 	}
-}
 
-// ServerAction defines server action.
-func ServerAction(cfg *config.Config) cli.ActionFunc {
-	return func(c *cli.Context) error {
-		metricz := metrics.New()
-		gr := run.Group{}
+	registry := metrics.New(
+		metrics.WithNamespace("gopad_ui"),
+		metrics.WithToken(token),
+	)
 
-		{
-			routing := router.Server(
+	gr := run.Group{}
+
+	{
+		server := &http.Server{
+			Addr: cfg.Server.Addr,
+			Handler: router.Server(
 				cfg,
-			)
+			),
+			ReadTimeout:  5 * time.Second,
+			WriteTimeout: 10 * time.Second,
+		}
 
-			server := &http.Server{
-				Addr: cfg.Server.Addr,
-				Handler: h2c.NewHandler(
-					routing,
-					&http2.Server{},
-				),
-				ReadTimeout:  5 * time.Second,
-				WriteTimeout: 10 * time.Second,
+		gr.Add(func() error {
+			log.Info().
+				Str("addr", cfg.Server.Addr).
+				Msg("Starting application server")
+
+			if cfg.Server.Cert != "" && cfg.Server.Key != "" {
+				return server.ListenAndServeTLS(
+					cfg.Server.Cert,
+					cfg.Server.Key,
+				)
 			}
 
-			gr.Add(func() error {
-				log.Info().
-					Str("addr", cfg.Server.Addr).
-					Msg("Starting HTTP server")
+			return server.ListenAndServe()
+		}, func(reason error) {
+			ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+			defer cancel()
 
-				if cfg.Server.Cert != "" && cfg.Server.Key != "" {
-					return server.ListenAndServeTLS(
-						cfg.Server.Cert,
-						cfg.Server.Key,
-					)
-				}
+			if err := server.Shutdown(ctx); err != nil {
+				log.Error().
+					Err(err).
+					Msg("Failed to shutdown application gracefully")
 
-				return server.ListenAndServe()
-			}, func(reason error) {
-				ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
-				defer cancel()
-
-				if err := server.Shutdown(ctx); err != nil {
-					log.Error().
-						Err(err).
-						Msg("Failed to shutdown HTTP gracefully")
-
-					return
-				}
-
-				log.Info().
-					Err(reason).
-					Msg("HTTP shutdown gracefully")
-			})
-		}
-
-		{
-			routing := router.Metrics(
-				cfg,
-				metricz,
-			)
-
-			server := &http.Server{
-				Addr: cfg.Metrics.Addr,
-				Handler: h2c.NewHandler(
-					routing,
-					&http2.Server{},
-				),
-				ReadTimeout:  5 * time.Second,
-				WriteTimeout: 10 * time.Second,
+				return
 			}
 
-			gr.Add(func() error {
-				log.Info().
-					Str("addr", cfg.Metrics.Addr).
-					Msg("Starting metrics server")
+			log.Info().
+				Err(reason).
+				Msg("Shutdown application gracefully")
+		})
+	}
 
-				return server.ListenAndServe()
-			}, func(reason error) {
-				ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
-				defer cancel()
-
-				if err := server.Shutdown(ctx); err != nil {
-					log.Error().
-						Err(err).
-						Msg("Failed to shutdown metrics gracefully")
-
-					return
-				}
-
-				log.Info().
-					Err(reason).
-					Msg("Metrics shutdown gracefully")
-			})
+	{
+		server := &http.Server{
+			Addr: cfg.Metrics.Addr,
+			Handler: router.Metrics(
+				cfg,
+				registry,
+			),
+			ReadTimeout:  5 * time.Second,
+			WriteTimeout: 10 * time.Second,
 		}
 
-		{
-			stop := make(chan os.Signal, 1)
+		gr.Add(func() error {
+			log.Info().
+				Str("addr", cfg.Metrics.Addr).
+				Msg("Starting metrics server")
 
-			gr.Add(func() error {
-				signal.Notify(stop, os.Interrupt)
+			return server.ListenAndServe()
+		}, func(reason error) {
+			ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+			defer cancel()
 
-				<-stop
+			if err := server.Shutdown(ctx); err != nil {
+				log.Error().
+					Err(err).
+					Msg("Failed to shutdown metrics gracefully")
 
-				return nil
-			}, func(err error) {
-				close(stop)
-			})
-		}
+				return
+			}
 
-		return gr.Run()
+			log.Info().
+				Err(reason).
+				Msg("Metrics shutdown gracefully")
+		})
+	}
+
+	{
+		stop := make(chan os.Signal, 1)
+
+		gr.Add(func() error {
+			signal.Notify(stop, os.Interrupt)
+
+			<-stop
+
+			return nil
+		}, func(_ error) {
+			close(stop)
+		})
+	}
+
+	if err := gr.Run(); err != nil {
+		os.Exit(1)
 	}
 }
