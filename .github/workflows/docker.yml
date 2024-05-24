@@ -54,6 +54,9 @@ jobs:
       - name: WebUI build
         run: npm run build
 
+      - name: Run generate
+        run: make generate
+
       - name: Build binary
         id: build
         env:
@@ -61,7 +64,7 @@ jobs:
           GOARCH: ${{ matrix.goarch }}
           GOARM: ${{ matrix.goarm }}
         run: |
-          make assets build
+          make build
 
       - name: Docker meta
         id: meta

@@ -71,6 +71,10 @@ jobs:
           name: frontend
           path: static/
 
+      - name: Run generate
+        id: generate
+        run: make generate
+
       - name: Run vet
         id: vet
         run: make vet

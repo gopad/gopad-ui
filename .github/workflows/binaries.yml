@@ -45,8 +45,11 @@ jobs:
       - name: WebUI build
         run: npm run build
 
+      - name: Run generate
+        run: make generate
+
       - name: Build release
-        run: make assets release
+        run: make release
 
       - name: Sign release
         id: gpgsign
