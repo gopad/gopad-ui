@@ -2,7 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { user } from "./user";
+import type { user } from './user';
 export type users = {
-  users?: Array<user>;
+    users?: Array<user>;
 };
+

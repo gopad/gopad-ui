@@ -2,9 +2,10 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { user } from "./user";
-import type { user_mod } from "./user_mod";
+import type { user } from './user';
+import type { user_mod } from './user_mod';
 export type user_mods = {
-  readonly user?: user;
-  mods?: Array<user_mod>;
+    readonly user?: user;
+    mods?: Array<user_mod>;
 };
+

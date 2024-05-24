@@ -1,13 +1,13 @@
 import { defineStore } from "pinia";
 
 import { pick } from "./helpers";
-import { Kleister } from "../client";
+import { Gopad } from "../client";
 
 import type { general_error } from "../client/models/general_error";
 import type { teams } from "../client/models/teams";
 import type { team } from "../client/models/team";
 
-const client = new Kleister({
+const client = new Gopad({
   BASE: "/api/v1",
 });
 

@@ -2,7 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { mod } from "./mod";
+import type { mod } from './mod';
 export type mods = {
-  mods?: Array<mod>;
+    mods?: Array<mod>;
 };
+

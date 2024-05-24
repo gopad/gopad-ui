@@ -19,7 +19,8 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "format": "eslint . --fix && prettier . --write",
-    "openapi": "openapi --name Kleister --client axios --input ../api/openapi/v1.yml --output ./src/client"
+    "openapi": "openapi --name Gopad --client axios --input ../api/openapi/v1.yml --output ./src/client",
+    "test": "echo no tests defined so far"
   },
   "dependencies": {
     "@formkit/vue": "^1.5.9",

@@ -2,7 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { forge } from "./forge";
+import type { forge } from './forge';
 export type forges = {
-  versions?: Array<forge>;
+    versions?: Array<forge>;
 };
+

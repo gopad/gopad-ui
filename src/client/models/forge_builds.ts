@@ -2,9 +2,10 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { build } from "./build";
-import type { forge } from "./forge";
+import type { build } from './build';
+import type { forge } from './forge';
 export type forge_builds = {
-  forge?: forge;
-  builds?: Array<build>;
+    forge?: forge;
+    builds?: Array<build>;
 };
+

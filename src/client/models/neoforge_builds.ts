@@ -2,9 +2,10 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { build } from "./build";
-import type { neoforge } from "./neoforge";
+import type { build } from './build';
+import type { neoforge } from './neoforge';
 export type neoforge_builds = {
-  neoforge?: neoforge;
-  builds?: Array<build>;
+    neoforge?: neoforge;
+    builds?: Array<build>;
 };
+

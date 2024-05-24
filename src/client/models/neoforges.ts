@@ -2,7 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { neoforge } from "./neoforge";
+import type { neoforge } from './neoforge';
 export type neoforges = {
-  versions?: Array<neoforge>;
+    versions?: Array<neoforge>;
 };
+

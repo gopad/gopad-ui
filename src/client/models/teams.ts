@@ -2,7 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { team } from "./team";
+import type { team } from './team';
 export type teams = {
-  teams?: Array<team>;
+    teams?: Array<team>;
 };
+

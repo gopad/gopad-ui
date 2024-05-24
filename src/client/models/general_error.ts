@@ -6,6 +6,7 @@
  * General error for regular HTTP status codes
  */
 export type general_error = {
-  status: number;
-  message: string;
+    status: number;
+    message: string;
 };
+

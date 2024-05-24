@@ -2,7 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { pack } from "./pack";
+import type { pack } from './pack';
 export type packs = {
-  packs?: Array<pack>;
+    packs?: Array<pack>;
 };
+
