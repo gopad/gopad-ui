@@ -2,10 +2,9 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { member } from './member';
-import type { team } from './team';
+import type { member } from "./member";
+import type { team } from "./team";
 export type team_users = {
-    readonly team?: team;
-    users?: Array<member>;
+  readonly team?: team;
+  users?: Array<member>;
 };
-

@@ -6,11 +6,10 @@
  * Validation error which shows failed fields
  */
 export type validation_error = {
-    status: number;
-    message: string;
-    errors?: Array<{
-        field?: string;
-        message?: string;
-    }>;
+  status: number;
+  message: string;
+  errors?: Array<{
+    field?: string;
+    message?: string;
+  }>;
 };
-

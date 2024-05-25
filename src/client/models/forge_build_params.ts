@@ -3,7 +3,6 @@
 /* tslint:disable */
 /* eslint-disable */
 export type forge_build_params = {
-    pack: string;
-    build: string;
+  pack: string;
+  build: string;
 };
-

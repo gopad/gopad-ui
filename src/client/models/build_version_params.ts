@@ -3,7 +3,6 @@
 /* tslint:disable */
 /* eslint-disable */
 export type build_version_params = {
-    mod: string;
-    version: string;
+  mod: string;
+  version: string;
 };
-

@@ -2,8 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { minecraft } from './minecraft';
+import type { minecraft } from "./minecraft";
 export type minecrafts = {
-    versions?: Array<minecraft>;
+  versions?: Array<minecraft>;
 };
-
