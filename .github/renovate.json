@@ -12,6 +12,13 @@
         "golang"
       ],
       "enabled": false
+    },
+    {
+      "description": "Ignore broken updates",
+      "matchDepNames": [
+        "eslint"
+      ],
+      "enabled": false
     }
   ]
 }
