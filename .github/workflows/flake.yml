@@ -43,7 +43,7 @@ jobs:
           pr-body: "New flakelock generated, automerge should handle that!"
           pr-labels: renovate
           git-author-name: GitHub Actions
-          git-author-email: github@cloudhippie.de
+          git-author-email: github@webhippie.de
           token: ${{ steps.token.outputs.token }}
 
       - name: Enable automerge
