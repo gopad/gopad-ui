@@ -49,35 +49,35 @@ func init() {
 
 	genCertCmd.Flags().StringSlice("cert-hosts", defaultCertGenCertHosts, "List of cert hosts")
 	viper.SetDefault("cert.hosts", defaultCertGenCertHosts)
-	_ = viper.BindPFlag("cert.hosts", healthCmd.Flags().Lookup("cert-hosts"))
+	_ = viper.BindPFlag("cert.hosts", genCertCmd.Flags().Lookup("cert-hosts"))
 
 	genCertCmd.Flags().String("cert-org", defaultCertGenCertOrg, "Org for certificate")
 	viper.SetDefault("cert.org", defaultCertGenCertOrg)
-	_ = viper.BindPFlag("cert.org", healthCmd.Flags().Lookup("cert-org"))
+	_ = viper.BindPFlag("cert.org", genCertCmd.Flags().Lookup("cert-org"))
 
 	genCertCmd.Flags().String("cert-name", defaultCertGenCertName, "Name for certificate")
 	viper.SetDefault("cert.name", defaultCertGenCertName)
-	_ = viper.BindPFlag("cert.name", healthCmd.Flags().Lookup("cert-name"))
+	_ = viper.BindPFlag("cert.name", genCertCmd.Flags().Lookup("cert-name"))
 
 	genCertCmd.Flags().String("ecdsa-curve", defaultCertGenEcdsaCurve, "ECDSA curve to use")
 	viper.SetDefault("ecdsa.curve", defaultCertGenEcdsaCurve)
-	_ = viper.BindPFlag("ecdsa.curve", healthCmd.Flags().Lookup("ecdsa-curve"))
+	_ = viper.BindPFlag("ecdsa.curve", genCertCmd.Flags().Lookup("ecdsa-curve"))
 
 	genCertCmd.Flags().Int("rsa-bits", defaultCertGenRSABits, "Size of RSA to gen")
 	viper.SetDefault("rsa.bits", defaultCertGenRSABits)
-	_ = viper.BindPFlag("rsa.bits", healthCmd.Flags().Lookup("rsa-bits"))
+	_ = viper.BindPFlag("rsa.bits", genCertCmd.Flags().Lookup("rsa-bits"))
 
 	genCertCmd.Flags().Duration("valid-for", defaultCertGenValidFor, "Duration for the cert")
 	viper.SetDefault("valid.for", defaultCertGenValidFor)
-	_ = viper.BindPFlag("valid.for", healthCmd.Flags().Lookup("valid-for"))
+	_ = viper.BindPFlag("valid.for", genCertCmd.Flags().Lookup("valid-for"))
 
 	genCertCmd.Flags().String("output-cert", defaultCertGenOutputCert, "Path to SSL cert")
 	viper.SetDefault("output.cert", defaultCertGenOutputCert)
-	_ = viper.BindPFlag("output.cert", healthCmd.Flags().Lookup("output-cert"))
+	_ = viper.BindPFlag("output.cert", genCertCmd.Flags().Lookup("output-cert"))
 
 	genCertCmd.Flags().String("output-key", defaultCertGenOutputKey, "Path to SSL key")
 	viper.SetDefault("output.key", defaultCertGenOutputKey)
-	_ = viper.BindPFlag("output.key", healthCmd.Flags().Lookup("output-key"))
+	_ = viper.BindPFlag("output.key", genCertCmd.Flags().Lookup("output-key"))
 }
 
 func genCertAction(_ *cobra.Command, _ []string) {
