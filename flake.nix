@@ -43,24 +43,10 @@
             default = {
               name = "gopad-ui";
 
-              pre-commit = {
-                hooks = {
-                  nixpkgs-fmt = {
-                    enable = true;
-                  };
-                  golangci-lint = {
-                    enable = true;
-                  };
-                  eslint = {
-                    enable = true;
-                  };
-                };
-              };
-
               languages = {
                 go = {
                   enable = true;
-                  package = pkgs.go_1_21;
+                  package = pkgs.go_1_22;
                 };
                 javascript = {
                   enable = true;
@@ -71,7 +57,6 @@
               packages = with pkgs; [
                 bingo
                 gnumake
-                golangci-lint
                 nixpkgs-fmt
               ];
 
