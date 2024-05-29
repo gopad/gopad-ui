@@ -35,6 +35,7 @@ branches:
       restrictions:
         apps:
           - renovate
+          - godpad
         users: []
         teams:
           - admins
