@@ -1,9 +1,8 @@
 .direnv/
 .devenv/
 
-pkg/assets/static.go
-.pre-commit-config.yaml
 coverage.out
+pkg/assets/static.go
 
 /bin
 /dist
