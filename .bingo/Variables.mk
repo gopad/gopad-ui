@@ -7,39 +7,27 @@ GO     ?= $(shell which go)
 
 # Below generated variables ensure that every time a tool under each variable is invoked, the correct version
 # will be used; reinstalling only if needed.
-# For example for bingo variable:
+# For example for fileb0x variable:
 #
 # In your main Makefile (for non array binaries):
 #
 #include .bingo/Variables.mk # Assuming -dir was set to .bingo .
 #
-#command: $(BINGO)
-#	@echo "Running bingo"
-#	@$(BINGO) <flags/args..>
+#command: $(FILEB0X)
+#	@echo "Running fileb0x"
+#	@$(FILEB0X) <flags/args..>
 #
-BINGO := $(GOBIN)/bingo-v0.9.0
-$(BINGO): $(BINGO_DIR)/bingo.mod
-	@# Install binary/ries using Go 1.14+ build command. This is using bwplotka/bingo-controlled, separate go module with pinned dependencies.
-	@echo "(re)installing $(GOBIN)/bingo-v0.9.0"
-	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=bingo.mod -o=$(GOBIN)/bingo-v0.9.0 "github.com/bwplotka/bingo"
-
-CALENS := $(GOBIN)/calens-v0.4.0
-$(CALENS): $(BINGO_DIR)/calens.mod
-	@# Install binary/ries using Go 1.14+ build command. This is using bwplotka/bingo-controlled, separate go module with pinned dependencies.
-	@echo "(re)installing $(GOBIN)/calens-v0.4.0"
-	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=calens.mod -o=$(GOBIN)/calens-v0.4.0 "github.com/restic/calens"
-
 FILEB0X := $(GOBIN)/fileb0x-v1.1.4
 $(FILEB0X): $(BINGO_DIR)/fileb0x.mod
 	@# Install binary/ries using Go 1.14+ build command. This is using bwplotka/bingo-controlled, separate go module with pinned dependencies.
 	@echo "(re)installing $(GOBIN)/fileb0x-v1.1.4"
 	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=fileb0x.mod -o=$(GOBIN)/fileb0x-v1.1.4 "github.com/UnnoTed/fileb0x"
 
-GOLANGCI_LINT := $(GOBIN)/golangci-lint-v1.58.2
+GOLANGCI_LINT := $(GOBIN)/golangci-lint-v1.59.0
 $(GOLANGCI_LINT): $(BINGO_DIR)/golangci-lint.mod
 	@# Install binary/ries using Go 1.14+ build command. This is using bwplotka/bingo-controlled, separate go module with pinned dependencies.
-	@echo "(re)installing $(GOBIN)/golangci-lint-v1.58.2"
-	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=golangci-lint.mod -o=$(GOBIN)/golangci-lint-v1.58.2 "github.com/golangci/golangci-lint/cmd/golangci-lint"
+	@echo "(re)installing $(GOBIN)/golangci-lint-v1.59.0"
+	@cd $(BINGO_DIR) && GOWORK=off $(GO) build -mod=mod -modfile=golangci-lint.mod -o=$(GOBIN)/golangci-lint-v1.59.0 "github.com/golangci/golangci-lint/cmd/golangci-lint"
 
 REFLEX := $(GOBIN)/reflex-v0.3.1
 $(REFLEX): $(BINGO_DIR)/reflex.mod
