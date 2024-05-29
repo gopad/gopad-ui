@@ -1,11 +1,14 @@
 FROM arm32v6/alpine:3.20
-RUN apk add --no-cache ca-certificates mailcap
+
+RUN apk add --no-cache ca-certificates mailcap && \
+    addgroup -g 1337 gopad && \
+    adduser -D -u 1337 -h /var/lib/gopad -G gopad gopad
 
 EXPOSE 8000 8080
 ENTRYPOINT ["/usr/bin/gopad-ui"]
 CMD ["server"]
 
-ENV GOPAD_UI_ASSETS /usr/share/gopad
-
-COPY static /usr/share/gopad
+COPY --chown=1337:1337 static /usr/share/gopad
 COPY bin/gopad-ui /usr/bin/gopad-ui
+WORKDIR /var/lib/gopad
+USER gopad
