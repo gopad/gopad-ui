@@ -7,7 +7,7 @@ import archive from "./rollup/archive.mjs";
 
 export default defineConfig({
   mode: "production",
-  envPrefix: "KLEISTER_UI_",
+  envPrefix: "GOPAD_UI_",
 
   plugins: [tsconfigPaths(), vue(), copy(), archive()],
 
