@@ -15,7 +15,7 @@
     },
     {
       "description": "Ignore broken updates",
-      "matchPackageNames": [
+      "matchDepNames": [
         "eslint"
       ],
       "enabled": false
