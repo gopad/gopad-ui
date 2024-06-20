@@ -74,7 +74,7 @@ import { useTeamStore } from "../../store/teams";
 
 import { useI18n } from "vue-i18n";
 
-import type { general_error } from "../../client/models/general_error";
+import type { notification } from "../../client/models/notification";
 import type { team } from "../../client/models/team";
 
 const store = useTeamStore();
@@ -92,7 +92,7 @@ const record = computed(() => {
 function submit(data: team) {
   return store
     .updateTeam(<string>record.value.slug, data)
-    .then((resp: void | general_error | team) => {
+    .then((resp: void | notification | team) => {
       const val = <team>resp;
       reset("update", val);
       router.push({ name: "showTeam", params: { teamId: val.slug } });

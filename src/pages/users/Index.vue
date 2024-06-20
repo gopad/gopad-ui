@@ -18,9 +18,9 @@
 
   <fwb-table v-if="getUsers.length > 0" class="m-5" hoverable>
     <fwb-table-head>
-      <fwb-table-head-cell>{{ t("common.slug") }}</fwb-table-head-cell>
       <fwb-table-head-cell>{{ t("users.username") }}</fwb-table-head-cell>
       <fwb-table-head-cell>{{ t("users.email") }}</fwb-table-head-cell>
+      <fwb-table-head-cell>{{ t("users.fullname") }}</fwb-table-head-cell>
       <fwb-table-head-cell>{{ t("users.admin") }}</fwb-table-head-cell>
       <fwb-table-head-cell>{{ t("users.active") }}</fwb-table-head-cell>
       <fwb-table-head-cell class="w-80"
@@ -31,22 +31,22 @@
     </fwb-table-head>
     <fwb-table-body>
       <fwb-table-row v-for="row in getUsers" :key="row.id">
-        <fwb-table-cell>{{ row.slug }}</fwb-table-cell>
         <fwb-table-cell>{{ row.username }}</fwb-table-cell>
         <fwb-table-cell>{{ row.email }}</fwb-table-cell>
+        <fwb-table-cell>{{ row.fullname }}</fwb-table-cell>
         <fwb-table-cell>{{ row.admin }}</fwb-table-cell>
         <fwb-table-cell>{{ row.active }}</fwb-table-cell>
         <fwb-table-cell>
           <ShowAction
-            :to="{ name: 'showUser', params: { userId: row.slug } }"
+            :to="{ name: 'showUser', params: { userId: row.username } }"
             tag="link"
           />
           <UpdateAction
-            :to="{ name: 'updateUser', params: { userId: row.slug } }"
+            :to="{ name: 'updateUser', params: { userId: row.username } }"
             tag="link"
           />
           <DeleteAction
-            :handler="deleteRecord(<string>row.slug)"
+            :handler="deleteRecord(<string>row.username)"
             :element="<string>row.username"
             tag="link"
           />
@@ -114,10 +114,10 @@ const getUsers = computed(() => {
   return store.users as user[];
 });
 
-function deleteRecord(slug: string) {
+function deleteRecord(username: string) {
   return () => {
     store
-      .deleteUser(slug)
+      .deleteUser(username)
       .then(() => {
         store.fetchUsers();
       })

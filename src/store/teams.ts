@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 import { pick } from "./helpers";
 import { Gopad } from "../client";
 
-import type { general_error } from "../client/models/general_error";
+import type { notification } from "../client/models/notification";
 import type { teams } from "../client/models/teams";
 import type { team } from "../client/models/team";
 
@@ -20,7 +20,7 @@ export const useTeamStore = defineStore("team", {
     async fetchTeams() {
       return client.team
         .listTeams()
-        .then((resp: general_error | teams) => {
+        .then((resp: notification | teams) => {
           const val = <teams>resp;
           this.teams = <team[]>val.teams;
         })
@@ -31,7 +31,7 @@ export const useTeamStore = defineStore("team", {
     async fetchTeam(teamId: string) {
       return client.team
         .showTeam(teamId)
-        .then((resp: general_error | team) => {
+        .then((resp: notification | team) => {
           const val = <team>resp;
           this.currentTeam = val;
         })

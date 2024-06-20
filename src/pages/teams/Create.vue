@@ -59,7 +59,7 @@ import { useTeamStore } from "../../store/teams";
 
 import { useI18n } from "vue-i18n";
 
-import type { general_error } from "../../client/models/general_error";
+import type { notification } from "../../client/models/notification";
 import type { team } from "../../client/models/team";
 
 const router = useRouter();
@@ -72,7 +72,7 @@ const { t } = useI18n({
 async function submit(data: team) {
   return store
     .createTeam(data)
-    .then((resp: void | general_error | team) => {
+    .then((resp: void | notification | team) => {
       const val = <team>resp;
       reset("create");
       router.push({ name: "showTeam", params: { teamId: val.slug } });

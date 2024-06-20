@@ -12,7 +12,7 @@
     </router-link>
     <router-link
       v-slot="{ href }"
-      :to="{ name: 'showUser', params: { userId: record.slug } }"
+      :to="{ name: 'showUser', params: { userId: record.username } }"
       custom
     >
       <fwb-breadcrumb-item :href="href">
@@ -23,10 +23,10 @@
 
   <ContentHeader :title="t('users.title.show', [record.username])">
     <UpdateAction
-      :to="{ name: 'updateUser', params: { userId: record.slug } }"
+      :to="{ name: 'updateUser', params: { userId: record.username } }"
     />
     <DeleteAction
-      :handler="deleteRecord(<string>record.slug)"
+      :handler="deleteRecord(<string>record.username)"
       :element="<string>record.username"
     />
   </ContentHeader>
@@ -41,12 +41,6 @@
       </fwb-table-row>
       <fwb-table-row>
         <fwb-table-head-cell class="text-right">{{
-          t("common.slug")
-        }}</fwb-table-head-cell>
-        <fwb-table-cell>{{ record.slug }}</fwb-table-cell>
-      </fwb-table-row>
-      <fwb-table-row>
-        <fwb-table-head-cell class="text-right">{{
           t("users.username")
         }}</fwb-table-head-cell>
         <fwb-table-cell>{{ record.username }}</fwb-table-cell>
@@ -56,6 +50,12 @@
           t("users.email")
         }}</fwb-table-head-cell>
         <fwb-table-cell>{{ record.email }}</fwb-table-cell>
+      </fwb-table-row>
+      <fwb-table-row>
+        <fwb-table-head-cell class="text-right">{{
+          t("users.fullname")
+        }}</fwb-table-head-cell>
+        <fwb-table-cell>{{ record.fullname }}</fwb-table-cell>
       </fwb-table-row>
       <fwb-table-row>
         <fwb-table-head-cell class="text-right">{{
@@ -104,10 +104,10 @@ const record = computed(() => {
   return store.currentUser;
 });
 
-function deleteRecord(slug: string) {
+function deleteRecord(username: string) {
   return () => {
     store
-      .deleteUser(slug)
+      .deleteUser(username)
       .then(() => {
         router.push({ name: "users" });
       })

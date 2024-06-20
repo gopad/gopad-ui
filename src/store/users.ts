@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 import { pick } from "./helpers";
 import { Gopad } from "../client";
 
-import type { general_error } from "../client/models/general_error";
+import type { notification } from "../client/models/notification";
 import type { users } from "../client/models/users";
 import type { user } from "../client/models/user";
 
@@ -20,7 +20,7 @@ export const useUserStore = defineStore("user", {
     async fetchUsers() {
       return client.user
         .listUsers()
-        .then((resp: general_error | users) => {
+        .then((resp: notification | users) => {
           const val = <users>resp;
           this.users = <user[]>val.users;
         })
@@ -31,7 +31,7 @@ export const useUserStore = defineStore("user", {
     async fetchUser(userId: string) {
       return client.user
         .showUser(userId)
-        .then((resp: general_error | user) => {
+        .then((resp: notification | user) => {
           const val = <user>resp;
           this.currentUser = val;
         })
@@ -49,10 +49,9 @@ export const useUserStore = defineStore("user", {
         .createUser(
           pick(
             data,
-            "slug",
-            "email",
             "username",
             "password",
+            "email",
             "fullname",
             "admin",
             "active",
@@ -68,10 +67,9 @@ export const useUserStore = defineStore("user", {
           userId,
           pick(
             data,
-            "slug",
-            "email",
             "username",
             "password",
+            "email",
             "fullname",
             "admin",
             "active",

@@ -24,14 +24,6 @@
   <div class="m-5">
     <FormKit id="create" type="form" submit-label="Create" @submit="submit">
       <FormKit
-        id="slug"
-        type="text"
-        name="slug"
-        validation="length:3,64"
-        label="Slug"
-        help="Slug of your user"
-      />
-      <FormKit
         id="username"
         type="text"
         name="username"
@@ -40,12 +32,28 @@
         help="Username of your user"
       />
       <FormKit
+        id="password"
+        type="text"
+        name="password"
+        validation="required|length:3,64"
+        label="Password"
+        help="Password of your user"
+      />
+      <FormKit
         id="email"
         type="text"
         name="email"
         validation="required|email"
         label="Email"
         help="Email of your user"
+      />
+      <FormKit
+        id="fullname"
+        type="text"
+        name="fullname"
+        validation=""
+        label="Fullname"
+        help="Fullname of your user"
       />
       <FormKit
         id="admin"
@@ -77,7 +85,7 @@ import { useUserStore } from "../../store/users";
 
 import { useI18n } from "vue-i18n";
 
-import type { general_error } from "../../client/models/general_error";
+import type { notification } from "../../client/models/notification";
 import type { user } from "../../client/models/user";
 
 const router = useRouter();
@@ -90,10 +98,10 @@ const { t } = useI18n({
 async function submit(data: user) {
   return store
     .createUser(data)
-    .then((resp: void | general_error | user) => {
+    .then((resp: void | notification | user) => {
       const val = <user>resp;
       reset("create");
-      router.push({ name: "showUser", params: { userId: val.slug } });
+      router.push({ name: "showUser", params: { userId: val.username } });
     })
     .catch((e) => {
       console.log(e);

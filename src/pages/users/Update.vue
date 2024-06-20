@@ -12,7 +12,7 @@
     </router-link>
     <router-link
       v-slot="{ href }"
-      :to="{ name: 'showUser', params: { userId: record.slug } }"
+      :to="{ name: 'showUser', params: { userId: record.username } }"
       custom
     >
       <fwb-breadcrumb-item :href="href">
@@ -21,7 +21,7 @@
     </router-link>
     <router-link
       v-slot="{ href }"
-      :to="{ name: 'updateUser', params: { userId: record.slug } }"
+      :to="{ name: 'updateUser', params: { userId: record.username } }"
       custom
     >
       <fwb-breadcrumb-item :href="href">{{
@@ -42,15 +42,7 @@
       name="updateUser"
       @submit="submit"
     >
-      <FormKit
-        id="slug"
-        type="text"
-        name="slug"
-        validation="length:3,64"
-        label="Slug"
-        help="Slug of your user"
-      />
-      <FormKit
+    <FormKit
         id="username"
         type="text"
         name="username"
@@ -59,12 +51,28 @@
         help="Username of your user"
       />
       <FormKit
+        id="password"
+        type="text"
+        name="password"
+        validation=""
+        label="Password"
+        help="Password of your user"
+      />
+      <FormKit
         id="email"
         type="text"
         name="email"
         validation="required|email"
         label="Email"
         help="Email of your user"
+      />
+      <FormKit
+        id="fullname"
+        type="text"
+        name="fullname"
+        validation=""
+        label="Fullname"
+        help="Fullname of your user"
       />
       <FormKit
         id="admin"
@@ -98,7 +106,7 @@ import { useUserStore } from "../../store/users";
 
 import { useI18n } from "vue-i18n";
 
-import type { general_error } from "../../client/models/general_error";
+import type { notification } from "../../client/models/notification";
 import type { user } from "../../client/models/user";
 
 const store = useUserStore();
@@ -115,11 +123,11 @@ const record = computed(() => {
 
 function submit(data: user) {
   return store
-    .updateUser(<string>record.value.slug, data)
-    .then((resp: void | general_error | user) => {
+    .updateUser(<string>record.value.username, data)
+    .then((resp: void | notification | user) => {
       const val = <user>resp;
       reset("update", val);
-      router.push({ name: "showUser", params: { userId: val.slug } });
+      router.push({ name: "showUser", params: { userId: val.username } });
     })
     .catch((e) => {
       console.log(e);
