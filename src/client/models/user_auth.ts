@@ -6,9 +6,8 @@
  * Model to represent user auth
  */
 export type user_auth = {
-    provider?: string;
-    ref?: string;
-    readonly created_at?: string;
-    readonly updated_at?: string;
+  provider?: string;
+  ref?: string;
+  readonly created_at?: string;
+  readonly updated_at?: string;
 };
-

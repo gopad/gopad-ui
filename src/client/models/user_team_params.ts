@@ -6,14 +6,13 @@
  * Parameters to attach or unlink user team
  */
 export type user_team_params = {
-    team: string;
-    perm?: user_team_params.perm;
+  team: string;
+  perm?: user_team_params.perm;
 };
 export namespace user_team_params {
-    export enum perm {
-        USER = 'user',
-        ADMIN = 'admin',
-        OWNER = 'owner',
-    }
+  export enum perm {
+    USER = "user",
+    ADMIN = "admin",
+    OWNER = "owner",
+  }
 }
-

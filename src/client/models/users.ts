@@ -2,12 +2,11 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { user } from './user';
+import type { user } from "./user";
 /**
  * Model to represent list of users
  */
 export type users = {
-    total?: number;
-    users?: Array<user>;
+  total?: number;
+  users?: Array<user>;
 };
-

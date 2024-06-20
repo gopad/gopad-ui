@@ -6,7 +6,6 @@
  * General structure to show validation errors
  */
 export type validation = {
-    field?: string;
-    message?: string;
+  field?: string;
+  message?: string;
 };
-

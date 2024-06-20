@@ -2,13 +2,12 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { validation } from './validation';
+import type { validation } from "./validation";
 /**
  * Generic response for errors and validations
  */
 export type notification = {
-    status?: number;
-    message?: string;
-    errors?: Array<validation>;
+  status?: number;
+  message?: string;
+  errors?: Array<validation>;
 };
-

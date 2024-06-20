@@ -42,7 +42,7 @@
       name="updateUser"
       @submit="submit"
     >
-    <FormKit
+      <FormKit
         id="username"
         type="text"
         name="username"
