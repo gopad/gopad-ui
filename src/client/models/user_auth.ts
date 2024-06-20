@@ -2,16 +2,13 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { user_team } from './user_team';
 /**
- * Model to represent team
+ * Model to represent user auth
  */
-export type team = {
-    readonly id?: string;
-    slug?: string;
-    name?: string;
+export type user_auth = {
+    provider?: string;
+    ref?: string;
     readonly created_at?: string;
     readonly updated_at?: string;
-    readonly users?: Array<user_team>;
 };
 

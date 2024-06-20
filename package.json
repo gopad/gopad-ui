@@ -19,7 +19,7 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "format": "eslint . --fix && prettier . --write",
-    "openapi": "openapi --name Gopad --client axios --input ../api/openapi/v1.yml --output ./src/client",
+    "openapi": "openapi --name Gopad --client axios --input https://dl.gopad.eu/openapi/1.0.0-alpha1.yml --output ./src/client",
     "test": "echo no tests defined so far"
   },
   "dependencies": {

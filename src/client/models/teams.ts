@@ -1,8 +1,13 @@
-/* generated using openapi-typescript-codegen -- do no edit */
+/* generated using openapi-typescript-codegen -- do not edit */
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { team } from "./team";
+import type { team } from './team';
+/**
+ * Model to represent list of teams
+ */
 export type teams = {
-  teams?: Array<team>;
+    total?: number;
+    teams?: Array<team>;
 };
+
