@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/drone/funcmap v0.0.0-20240227160611-7e19e9cd5a1c
-	github.com/go-chi/chi/v5 v5.0.14
+	github.com/go-chi/chi/v5 v5.1.0
 	github.com/joho/godotenv v1.5.1
 	github.com/oklog/run v1.1.0
 	github.com/prometheus/client_golang v1.19.1
