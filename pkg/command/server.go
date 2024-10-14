@@ -24,16 +24,16 @@ var (
 		Args:  cobra.NoArgs,
 	}
 
-	defaultMetricsAddr  = "0.0.0.0:8081"
+	defaultMetricsAddr  = "0.0.0.0:8001"
 	defaultMetricsToken = ""
-	defaultServerAddr   = "0.0.0.0:8080"
+	defaultServerAddr   = "0.0.0.0:8081"
 	defaultMetricsPprof = false
-	defaultServerHost   = "http://localhost:8080"
+	defaultServerHost   = "http://localhost:8081"
 	defaultServerRoot   = "/"
 	defaultServerAssets = ""
 	defaultServerCert   = ""
 	defaultServerKey    = ""
-	defaultAPIEndpoint  = "http://localhost:8000"
+	defaultAPIEndpoint  = "http://localhost:8080"
 )
 
 func init() {

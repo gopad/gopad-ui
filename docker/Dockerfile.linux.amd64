@@ -4,7 +4,7 @@ RUN apk add --no-cache ca-certificates mailcap && \
     addgroup -g 1337 gopad && \
     adduser -D -u 1337 -h /var/lib/gopad -G gopad gopad
 
-EXPOSE 8000 8080
+EXPOSE 8001 8081
 ENTRYPOINT ["/usr/bin/gopad-ui"]
 CMD ["server"]
 
