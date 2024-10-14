@@ -1,0 +1,29 @@
+root = "."
+tmp_dir = "tmp"
+
+[build]
+cmd = "make bin/gopad-ui-debug"
+bin = "bin/gopad-ui-debug"
+
+args_bin = [
+  "--log-pretty",
+  "--log-color",
+  "--log-level",
+  "debug",
+  "server",
+  "--server-assets",
+  "static/"
+]
+
+exclude_dir = [
+  ".direnv",
+  ".devenv",
+  "node_modules"
+]
+
+exclude_regex = [
+  "_test\\.go"
+]
+
+[misc]
+clean_on_exit = true

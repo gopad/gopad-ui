@@ -55,8 +55,10 @@
               };
 
               packages = with pkgs; [
+                air
                 bingo
                 gnumake
+                goreleaser
                 nixpkgs-fmt
               ];
 
