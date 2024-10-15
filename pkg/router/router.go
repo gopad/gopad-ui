@@ -47,6 +47,7 @@ func Server(
 	mux.Route(cfg.Server.Root, func(root chi.Router) {
 		root.Get("/", handler.Index(cfg))
 
+		root.Get("/config.json", handler.Config(cfg))
 		root.Get("/favicon.ico", handler.Favicon(cfg))
 		root.Get("/manifest.json", handler.Manifest(cfg))
 

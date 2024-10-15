@@ -18,7 +18,8 @@ args_bin = [
 exclude_dir = [
   ".direnv",
   ".devenv",
-  "node_modules"
+  "node_modules",
+  "static"
 ]
 
 exclude_regex = [

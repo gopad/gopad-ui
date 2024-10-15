@@ -1,15 +1,11 @@
 import { defineStore } from "pinia";
 
+import { useConfigStore } from "./config";
 import { pick } from "./helpers";
-import { Gopad } from "../client";
 
 import type { notification } from "../client/models/notification";
 import type { users } from "../client/models/users";
 import type { user } from "../client/models/user";
-
-const client = new Gopad({
-  BASE: "/api/v1",
-});
 
 export const useUserStore = defineStore("user", {
   state: () => ({
@@ -18,8 +14,8 @@ export const useUserStore = defineStore("user", {
   }),
   actions: {
     async fetchUsers() {
-      return client.user
-        .listUsers()
+      return useConfigStore()
+        .client.user.listUsers()
         .then((resp: notification | users) => {
           const val = <users>resp;
           this.users = <user[]>val.users;
@@ -29,8 +25,8 @@ export const useUserStore = defineStore("user", {
         });
     },
     async fetchUser(userId: string) {
-      return client.user
-        .showUser(userId)
+      return useConfigStore()
+        .client.user.showUser(userId)
         .then((resp: notification | user) => {
           const val = <user>resp;
           this.currentUser = val;
@@ -40,13 +36,15 @@ export const useUserStore = defineStore("user", {
         });
     },
     async deleteUser(userId: string) {
-      return client.user.deleteUser(userId).catch((error) => {
-        console.log(error);
-      });
+      return useConfigStore()
+        .client.user.deleteUser(userId)
+        .catch((error) => {
+          console.log(error);
+        });
     },
     async createUser(data: user) {
-      return client.user
-        .createUser(
+      return useConfigStore()
+        .client.user.createUser(
           pick(
             data,
             "username",
@@ -62,8 +60,8 @@ export const useUserStore = defineStore("user", {
         });
     },
     async updateUser(userId: string, data: user) {
-      return client.user
-        .updateUser(
+      return useConfigStore()
+        .client.user.updateUser(
           userId,
           pick(
             data,

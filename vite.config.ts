@@ -8,6 +8,7 @@ import archive from "./rollup/archive.mjs";
 export default defineConfig({
   mode: "production",
   envPrefix: "GOPAD_UI_",
+  base: "./",
 
   plugins: [tsconfigPaths(), vue(), copy(), archive()],
 

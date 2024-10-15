@@ -1,15 +1,11 @@
 import { defineStore } from "pinia";
 
+import { useConfigStore } from "./config";
 import { pick } from "./helpers";
-import { Gopad } from "../client";
 
 import type { notification } from "../client/models/notification";
 import type { teams } from "../client/models/teams";
 import type { team } from "../client/models/team";
-
-const client = new Gopad({
-  BASE: "/api/v1",
-});
 
 export const useTeamStore = defineStore("team", {
   state: () => ({
@@ -18,8 +14,8 @@ export const useTeamStore = defineStore("team", {
   }),
   actions: {
     async fetchTeams() {
-      return client.team
-        .listTeams()
+      return useConfigStore()
+        .client.team.listTeams()
         .then((resp: notification | teams) => {
           const val = <teams>resp;
           this.teams = <team[]>val.teams;
@@ -29,8 +25,8 @@ export const useTeamStore = defineStore("team", {
         });
     },
     async fetchTeam(teamId: string) {
-      return client.team
-        .showTeam(teamId)
+      return useConfigStore()
+        .client.team.showTeam(teamId)
         .then((resp: notification | team) => {
           const val = <team>resp;
           this.currentTeam = val;
@@ -40,20 +36,22 @@ export const useTeamStore = defineStore("team", {
         });
     },
     async deleteTeam(teamId: string) {
-      return client.team.deleteTeam(teamId).catch((error) => {
-        console.log(error);
-      });
+      return useConfigStore()
+        .client.team.deleteTeam(teamId)
+        .catch((error) => {
+          console.log(error);
+        });
     },
     async createTeam(data: team) {
-      return client.team
-        .createTeam(pick(data, "slug", "name"))
+      return useConfigStore()
+        .client.team.createTeam(pick(data, "slug", "name"))
         .catch((error) => {
           console.log(error);
         });
     },
     async updateTeam(teamId: string, data: team) {
-      return client.team
-        .updateTeam(teamId, pick(data, "slug", "name"))
+      return useConfigStore()
+        .client.team.updateTeam(teamId, pick(data, "slug", "name"))
         .catch((error) => {
           console.log(error);
         });

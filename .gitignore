@@ -4,9 +4,10 @@
 coverage.out
 pkg/assets/static.go
 
-/bin
-/dist
-/static
+bin/
+dist/
+static/
+tmp/
 
-/node_modules
+node_modules/
 npm-debug.log*

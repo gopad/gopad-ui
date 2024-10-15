@@ -20,7 +20,7 @@ func Index(cfg *config.Config) http.HandlerFunc {
 		).ExecuteTemplate(
 			w,
 			"index.html",
-			vars(cfg),
+			nil,
 		); err != nil {
 			logger.Warn().
 				Err(err).
@@ -32,12 +32,5 @@ func Index(cfg *config.Config) http.HandlerFunc {
 				http.StatusInternalServerError,
 			)
 		}
-	}
-}
-
-func vars(cfg *config.Config) map[string]string {
-	return map[string]string{
-		"Root":     cfg.Server.Root,
-		"Endpoint": cfg.API.Endpoint,
 	}
 }

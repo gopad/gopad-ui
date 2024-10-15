@@ -20,6 +20,8 @@ import "../node_modules/flowbite-vue/dist/index.css";
 import router from "./router";
 import App from "./App.vue";
 
+import { useConfigStore } from "./store/config";
+
 library.add(fab, far, fas);
 
 const pinia = createPinia();
@@ -86,4 +88,8 @@ app.use(router);
 
 app.component("FontAwesomeIcon", FontAwesomeIcon);
 
-app.mount("#app");
+useConfigStore()
+  .loadConfig()
+  .then(() => {
+    app.mount("#app");
+  });

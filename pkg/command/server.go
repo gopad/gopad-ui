@@ -33,7 +33,7 @@ var (
 	defaultServerAssets = ""
 	defaultServerCert   = ""
 	defaultServerKey    = ""
-	defaultAPIEndpoint  = "http://localhost:8080"
+	defaultAPIEndpoint  = "http://localhost:8080/api"
 )
 
 func init() {

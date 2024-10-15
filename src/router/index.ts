@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHashHistory } from "vue-router";
 import { WelcomeIndex } from "../pages/welcome";
 import { UserIndex, UserCreate, UserShow, UserUpdate } from "../pages/users";
 import { TeamIndex, TeamCreate, TeamShow, TeamUpdate } from "../pages/teams";
@@ -51,8 +51,13 @@ const routes = [
   },
 ];
 
+function getBasePath(): string {
+  const { pathname } = window.location;
+  return pathname.substring(0, pathname.lastIndexOf("/") + 1);
+}
+
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(getBasePath()),
   routes,
 });
 
