@@ -2,7 +2,7 @@ module github.com/gopad/gopad-ui
 
 go 1.22.0
 
-toolchain go1.23.3
+toolchain go1.23.4
 
 require (
 	github.com/drone/funcmap v0.0.0-20240227160611-7e19e9cd5a1c
