@@ -31,7 +31,7 @@
     "@fortawesome/vue-fontawesome": "^3.0.6",
     "@vitejs/plugin-vue": "^5.0.4",
     "axios": "^1.6.7",
-    "flowbite": "^2.3.0",
+    "flowbite": "^3.0.0",
     "flowbite-vue": "^0.1.2",
     "pinia": "^2.1.7",
     "vite": "^6.0.0",
