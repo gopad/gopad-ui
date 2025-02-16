@@ -2,12 +2,13 @@
 .devenv/
 
 coverage.out
-pkg/assets/static.go
+
+pkg/frontend/files/
 
 bin/
 dist/
-static/
-tmp/
 
 node_modules/
 npm-debug.log*
+
+.pre-commit-config.yaml
