@@ -26,7 +26,7 @@ after the setup.
 If you also want to publish it as a single binary with our server written in Go
 make sure you have a working Go environment, for further reference or a guide
 take a look at the [install instructions][golang]. This project requires
-Go >= v1.18, at least that's the version we are using.
+Go >= v1.24, at least that's the version we are using.
 
 ```console
 git clone https://github.com/gopad/gopad-ui.git
@@ -46,20 +46,17 @@ any webserver or anything else beside launching this binary.
 
 To start developing on this UI you have to execute only a few commands. To setup
 a NodeJS environment or even a Go environment is out of the scope of this
-document. To start development just execute those commands:
+document. This will start the NodeJS server which also provides hot reloading.
+To start development just execute those commands:
 
 ```console
 npm install --ci
-npm run server
-
-make generate build
-./bin/gopad-ui --log-level debug server --static dist/static/
+npm run serve
 ```
 
-The development server reloads the used assets on every request. To properly
-work with it you need to start the [API server][api] separately since this
-project doesn't include it. After launching this command on a terminal you can
-access the web interface at [http://localhost:8080](http://localhost:8080).
+To properly work with it you need to start the [API server][api] separately
+since this project doesn't include it. After launching this command on a
+terminal you can access the web interface at [http://localhost:8080](http://localhost:8080).
 
 ## Security
 

@@ -1,25 +1,22 @@
 package handler
 
 import (
+	"io"
 	"net/http"
 
-	"github.com/gopad/gopad-ui/pkg/assets"
-	"github.com/gopad/gopad-ui/pkg/config"
+	"github.com/gopad/gopad-ui/pkg/frontend"
 	"github.com/rs/zerolog/log"
 )
 
-// Favicon handles the delivery of the favicon.
-func Favicon(cfg *config.Config) http.HandlerFunc {
-	logger := log.With().
-		Str("handler", "favicon").
-		Logger()
-
+// Favicon returns the favicon for embedded frontend.
+func (h *Handler) Favicon() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		file, err := assets.Load(cfg).Open("favicon.ico")
+		file, err := frontend.Load(h.config).Open("favicon.svg")
 
 		if err != nil {
-			logger.Warn().
+			log.Warn().
 				Err(err).
+				Str("handler", "favicon").
 				Msg("Failed to load favicon")
 
 			http.Error(
@@ -27,13 +24,17 @@ func Favicon(cfg *config.Config) http.HandlerFunc {
 				"Failed to load favicon",
 				http.StatusInternalServerError,
 			)
+
+			return
 		}
 
+		defer file.Close()
 		stat, err := file.Stat()
 
 		if err != nil {
-			logger.Warn().
+			log.Warn().
 				Err(err).
+				Str("handler", "favicon").
 				Msg("Failed to stat favicon")
 
 			http.Error(
@@ -41,14 +42,16 @@ func Favicon(cfg *config.Config) http.HandlerFunc {
 				"Failed to stat favicon",
 				http.StatusInternalServerError,
 			)
+
+			return
 		}
 
 		http.ServeContent(
 			w,
 			r,
-			"favicon.ico",
+			"favicon.svg",
 			stat.ModTime(),
-			file,
+			file.(io.ReadSeeker),
 		)
 	}
 }

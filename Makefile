@@ -1,5 +1,3 @@
-include .bingo/Variables.mk
-
 SHELL := bash
 NAME := gopad-ui
 IMPORT := github.com/gopad/$(NAME)
@@ -68,24 +66,16 @@ vet:
 	go vet $(PACKAGES)
 
 .PHONY: golangci
-golangci: $(GOLANGCI_LINT)
-	$(GOLANGCI_LINT) run ./...
-
-.PHONY: staticcheck
-staticcheck: $(STATICCHECK)
-	$(STATICCHECK) -tags '$(TAGS)' $(PACKAGES)
+golangci:
+	go tool github.com/golangci/golangci-lint/cmd/golangci-lint run ./...
 
 .PHONY: lint
-lint: $(REVIVE)
-	for PKG in $(PACKAGES); do $(REVIVE) -config revive.toml -set_exit_status $$PKG || exit 1; done;
+lint:
+	for PKG in $(PACKAGES); do go tool github.com/mgechev/revive -config revive.toml -set_exit_status $$PKG || exit 1; done;
 
 .PHONY: generate
-generate: assets
+generate:
 	go generate $(PACKAGES)
-
-.PHONY: assets
-assets: $(FILEB0X)
-	$(FILEB0X) pkg/assets/static.yml
 
 .PHONY: test
 test: test
@@ -157,3 +147,7 @@ release-checksum:
 
 .PHONY: release-finish
 release-finish: release-reduce release-checksum
+
+.PHONY: watch
+watch:
+	go tool github.com/air-verse/air -c .air.toml

@@ -1,16 +1,64 @@
 package templates
 
 import (
+	"bytes"
+	"embed"
 	"html/template"
+	"io"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 
 	"github.com/drone/funcmap"
-	"github.com/gopad/gopad-ui/pkg/assets"
 	"github.com/gopad/gopad-ui/pkg/config"
 	"github.com/rs/zerolog/log"
 )
+
+var (
+	//go:embed files/*
+	assets embed.FS
+)
+
+// String renders the template and returns a string.
+func String(cfg *config.Config, name string, data any) string {
+	tmpls := Load(cfg)
+	buffer := bytes.NewBufferString("")
+
+	if err := tmpls.ExecuteTemplate(
+		buffer,
+		name,
+		data,
+	); err != nil {
+		log.Warn().
+			Err(err).
+			Str("file", name).
+			Msg("failed to parse template content")
+	}
+
+	return buffer.String()
+}
+
+// Reader simply provides an io.Reader for direct usage.
+func Reader(cfg *config.Config, name string, data any) io.Reader {
+	tmpls := Load(cfg)
+	buffer := bytes.NewBufferString("")
+
+	if err := tmpls.ExecuteTemplate(
+		buffer,
+		name,
+		data,
+	); err != nil {
+		log.Warn().
+			Err(err).
+			Str("file", name).
+			Msg("failed to parse template content")
+	}
+
+	return bytes.NewReader(
+		buffer.Bytes(),
+	)
+}
 
 // Load loads the template to make it parseable.
 func Load(cfg *config.Config) *template.Template {
@@ -20,35 +68,36 @@ func Load(cfg *config.Config) *template.Template {
 		Funcs(),
 	)
 
-	files, err := assets.WalkDirs(
+	files, err := embeddedTemplates(
+		&assets,
 		"",
-		false,
 	)
 
 	if err != nil {
 		log.Warn().
 			Err(err).
-			Msg("failed to get builtin template list")
+			Msg("Failed to get builtin template list")
 	} else {
 		for _, name := range files {
-			if !strings.HasSuffix(name, ".html") {
-				continue
-			}
-
 			file, err := assets.ReadFile(name)
 
 			if err != nil {
 				log.Warn().
 					Err(err).
 					Str("file", name).
-					Msg("failed to read builtin template")
+					Msg("Failed to read builtin template")
 			}
 
-			if _, err := tpls.New(name).Parse(string(file)); err != nil {
+			if _, err := tpls.New(
+				strings.TrimPrefix(
+					name,
+					"files/",
+				),
+			).Parse(string(file)); err != nil {
 				log.Warn().
 					Err(err).
 					Str("file", name).
-					Msg("failed to parse builtin template")
+					Msg("Failed to parse builtin template")
 			}
 		}
 	}
@@ -66,7 +115,7 @@ func Load(cfg *config.Config) *template.Template {
 					return nil
 				}
 
-				if !strings.HasSuffix(path, ".html") {
+				if !strings.HasSuffix(path, ".tmpl") {
 					return nil
 				}
 
@@ -85,7 +134,7 @@ func Load(cfg *config.Config) *template.Template {
 					log.Warn().
 						Err(err).
 						Str("file", name).
-						Msg("failed to read custom template")
+						Msg("Failed to read custom template")
 				}
 
 				tplName := strings.TrimPrefix(
@@ -100,12 +149,12 @@ func Load(cfg *config.Config) *template.Template {
 					log.Warn().
 						Err(err).
 						Str("file", name).
-						Msg("failed to parse custom template")
+						Msg("Failed to parse custom template")
 				}
 			}
 		} else {
 			log.Warn().
-				Msg("custom assets directory doesn't exist")
+				Msg("Custom templates directory doesn't exist")
 		}
 	}
 
@@ -115,4 +164,53 @@ func Load(cfg *config.Config) *template.Template {
 // Funcs provides some general usefule template helpers.
 func Funcs() template.FuncMap {
 	return funcmap.Funcs
+}
+
+func embeddedTemplates(fs *embed.FS, dir string) ([]string, error) {
+	if len(dir) == 0 {
+		dir = "."
+	}
+
+	result := []string{}
+	entries, err := fs.ReadDir(dir)
+
+	if err != nil {
+		return nil, err
+	}
+
+	for _, entry := range entries {
+		fp := path.Join(
+			dir,
+			entry.Name(),
+		)
+
+		if entry.IsDir() {
+			res, err := embeddedTemplates(
+				fs,
+				fp,
+			)
+
+			if err != nil {
+				return nil, err
+			}
+
+			result = append(
+				result,
+				res...,
+			)
+
+			continue
+		}
+
+		if !strings.HasSuffix(fp, ".tmpl") {
+			continue
+		}
+
+		result = append(
+			result,
+			fp,
+		)
+	}
+
+	return result, nil
 }

@@ -3,34 +3,47 @@ package handler
 import (
 	"net/http"
 
-	"github.com/gopad/gopad-ui/pkg/config"
+	"github.com/go-chi/render"
+	"github.com/gopad/gopad-ui/pkg/manifest"
 	"github.com/gopad/gopad-ui/pkg/templates"
 	"github.com/rs/zerolog/log"
 )
 
-// Index renders the general template on all routes.
-func Index(cfg *config.Config) http.HandlerFunc {
-	logger := log.With().
-		Str("handler", "index").
-		Logger()
+// Index renders the template for embedded frontend.
+func (h *Handler) Index() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		m, err := manifest.Read(h.config)
 
-	return func(w http.ResponseWriter, _ *http.Request) {
-		if err := templates.Load(
-			cfg,
-		).ExecuteTemplate(
-			w,
-			"index.html",
-			nil,
-		); err != nil {
-			logger.Warn().
+		if err != nil {
+			log.Warn().
 				Err(err).
-				Msg("Failed to process template")
+				Str("handler", "manifest").
+				Msg("Failed to load manifest")
 
 			http.Error(
 				w,
-				"Failed to process template",
+				"Failed to load manifest",
 				http.StatusInternalServerError,
 			)
+
+			return
 		}
+
+		render.Status(r, http.StatusOK)
+		render.HTML(w, r, templates.String(
+			h.config,
+			"index.tmpl",
+			struct {
+				Prefix      string
+				Stylesheets []string
+				Javascripts []string
+			}{
+				Prefix:      h.Prefix(),
+				Stylesheets: m.Index().Stylehseets,
+				Javascripts: []string{
+					m.Index().File,
+				},
+			},
+		))
 	}
 }

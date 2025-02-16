@@ -19,6 +19,7 @@ import (
 func Server(
 	cfg *config.Config,
 ) *chi.Mux {
+	handlers := handler.New(cfg)
 	mux := chi.NewRouter()
 
 	mux.Use(hlog.NewHandler(log.Logger))
@@ -42,16 +43,16 @@ func Server(
 	mux.Use(header.Secure)
 	mux.Use(header.Options)
 
-	mux.NotFound(handler.Index(cfg))
+	mux.NotFound(handlers.Index())
 
 	mux.Route(cfg.Server.Root, func(root chi.Router) {
-		root.Get("/", handler.Index(cfg))
+		root.Get("/", handlers.Index())
 
-		root.Get("/config.json", handler.Config(cfg))
-		root.Get("/favicon.ico", handler.Favicon(cfg))
-		root.Get("/manifest.json", handler.Manifest(cfg))
+		root.Get("/config.json", handlers.Config())
+		root.Get("/favicon.svg", handlers.Favicon())
+		root.Get("/manifest.json", handlers.Manifest())
 
-		root.Handle("/assets/*", handler.Static(cfg))
+		root.Handle("/assets/*", handlers.Assets())
 	})
 
 	return mux
