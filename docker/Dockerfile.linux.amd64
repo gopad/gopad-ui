@@ -8,7 +8,7 @@ EXPOSE 8001 8081
 ENTRYPOINT ["/usr/bin/gopad-ui"]
 CMD ["server"]
 
-COPY --chown=1337:1337 static /usr/share/gopad
+COPY --chown=1337:1337 pkg/frontend/files /usr/share/gopad
 COPY bin/gopad-ui /usr/bin/gopad-ui
 WORKDIR /var/lib/gopad
 USER gopad
